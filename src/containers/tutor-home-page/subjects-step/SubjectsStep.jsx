@@ -1,16 +1,19 @@
-import Box from '@mui/material/Box'
-
-import { styles } from '~/containers/tutor-home-page/subjects-step/SubjectsStep.styles'
-import img from '~/assets/img/tutor-home-page/become-tutor/study-category.svg'
-import { Button, FormHelperText, Typography } from '@mui/material'
+import { useState, useMemo } from 'react'
 import { useTranslation } from 'react-i18next'
-import AsyncAutocomplete from '~/components/async-autocomlete/AsyncAutocomplete'
-import { useMemo, useState } from 'react'
+import { Box, Button, FormHelperText, Typography } from '@mui/material'
+
+import useBreakpoints from '~/hooks/use-breakpoints'
+
+import { subjectService } from '~/services/subject-service'
 import { categoryService } from '~/services/category-service'
 import { useStepContext } from '~/context/step-context'
+
+import AsyncAutocomplete from '~/components/async-autocomlete/AsyncAutocomplete'
 import AppChipList from '~/components/app-chips-list/AppChipList'
-import useBreakpoints from '~/hooks/use-breakpoints'
-import { subjectService } from '~/services/subject-service'
+
+import img from '~/assets/img/tutor-home-page/become-tutor/study-category.svg'
+import { styles } from '~/containers/tutor-home-page/subjects-step/SubjectsStep.styles'
+
 import { mockGetCategories } from './constants'
 import { mockGetSubjects } from './constants'
 
