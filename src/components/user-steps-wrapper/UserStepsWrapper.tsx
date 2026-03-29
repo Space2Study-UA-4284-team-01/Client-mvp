@@ -12,7 +12,8 @@ import LanguageStep from '~/containers/tutor-home-page/language-step/LanguageSte
 
 import {
   tutorStepLabels,
-  initialValues
+  initialValues,
+  studentStepLabels
 } from '~/components/user-steps-wrapper/constants'
 import { student } from '~/constants'
 
@@ -23,6 +24,7 @@ interface UserStepsWrapperProps {
 const UserStepsWrapper: FC<UserStepsWrapperProps> = ({ userRole }) => {
   const [isUserFetched, setIsUserFetched] = useState(false)
   const dispatch = useAppDispatch()
+  const stepLabels = userRole === student ? studentStepLabels : tutorStepLabels
 
   useEffect(() => {
     dispatch(markFirstLoginComplete())
@@ -38,8 +40,6 @@ const UserStepsWrapper: FC<UserStepsWrapperProps> = ({ userRole }) => {
     <LanguageStep key='3' />,
     <AddPhotoStep key='4' />
   ]
-
-  const stepLabels = userRole === student ? '' : tutorStepLabels
 
   return (
     <StepProvider initialValues={initialValues} stepLabels={stepLabels}>

@@ -1,11 +1,13 @@
-import { useState, useMemo } from 'react'
+import { useState, ReactNode, SyntheticEvent } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Box, Button, FormHelperText, Typography } from '@mui/material'
 
 import useBreakpoints from '~/hooks/use-breakpoints'
 
-import { subjectService } from '~/services/subject-service'
-import { categoryService } from '~/services/category-service'
+//TODO:
+// import { subjectService } from '~/services/subject-service'
+//TODO:
+// import { categoryService } from '~/services/category-service'
 import { useStepContext } from '~/context/step-context'
 
 import AsyncAutocomplete from '~/components/async-autocomlete/AsyncAutocomplete'
@@ -16,55 +18,69 @@ import { styles } from '~/containers/tutor-home-page/subjects-step/SubjectsStep.
 
 import { mockGetCategories } from './constants'
 import { mockGetSubjects } from './constants'
+import { CategoryNameInterface, SubjectNameInterface } from '~/types'
 
-const USE_MOCK = true
+interface SubjectsStepProps {
+  btnsBox?: ReactNode
+  stepLabel: string
+}
 
-const SubjectsStep = ({ btnsBox }) => {
+const SubjectsStep = ({ btnsBox, stepLabel }: SubjectsStepProps) => {
   const { t } = useTranslation()
   const { isLaptopAndAbove, isMobile } = useBreakpoints()
-  const [subjectError, setSubjectError] = useState()
-  const [subjects, setSubjects] = useState({
+  const [subjectError, setSubjectError] = useState<string>('')
+  const [subjects, setSubjects] = useState<{
+    category: CategoryNameInterface | null
+    subject: SubjectNameInterface | null
+  }>({
     category: null,
     subject: null
   })
-  const { stepData, handleStepData } = useStepContext()
-  const subjectNames = stepData.subjects.map((subject) => subject.name)
 
-  const categoryServiceFn = USE_MOCK
-    ? mockGetCategories
-    : categoryService.getCategoriesNames
+  const { stepData, handleStepData } = useStepContext()
+  const stepDataByLabel = stepData as unknown as Record<
+    string,
+    SubjectNameInterface[] | undefined
+  >
+  const currentSubjects = stepDataByLabel[stepLabel] ?? []
+
+  const subjectNames = currentSubjects.map((s) => s.name)
+
+  //TODO:
+  // const getCategoriesNames = categoryService.getCategoriesNames
 
   const categoryId = subjects.category?._id
-  const subjectsServiceFn = useMemo(
-    () =>
-      USE_MOCK
-        ? mockGetSubjects(categoryId)
-        : subjectService.getSubjectsNames(categoryId),
-    [categoryId]
-  )
+  // TODO:
+  // const getSubjectsNames = useCallback(
+  //   () => subjectService.getSubjectsNames(category),
+  //   [category]
+  // )
 
-  const onChangeCategory = (_, value) => {
+  const onChangeCategory = (
+    _: SyntheticEvent,
+    value: CategoryNameInterface | null
+  ) => {
     setSubjects((prev) =>
       prev.category?._id !== value?._id
-        ? {
-            category: value,
-            subject: null
-          }
+        ? { category: value, subject: null }
         : prev
     )
   }
 
-  const onChangeSubject = (_, value) => {
+  const onChangeSubject = (
+    _: SyntheticEvent,
+    value: SubjectNameInterface | null
+  ) => {
     setSubjects((prev) => ({ category: prev.category, subject: value }))
   }
 
   const addSubject = () => {
-    if (!subjects.subject && !subjects.category) {
+    if (!subjects.subject || !subjects.category) {
       setSubjectError(t('becomeTutor.categories.emptyFields'))
       return
     }
 
-    const isSameSubject = stepData.subjects.some(
+    const isSameSubject = currentSubjects.some(
       (s) => s._id === subjects.subject?._id
     )
 
@@ -73,17 +89,14 @@ const SubjectsStep = ({ btnsBox }) => {
       return
     }
 
-    handleStepData('subjects', [...stepData.subjects, subjects.subject])
-    setSubjectError(null)
-    setSubjects({
-      category: null,
-      subject: null
-    })
+    handleStepData(stepLabel, [...currentSubjects, subjects.subject])
+    setSubjectError('')
+    setSubjects({ category: null, subject: null })
   }
 
-  const removeSubject = (name) => {
-    const updated = stepData.subjects.filter((subject) => subject.name !== name)
-    handleStepData('subjects', updated)
+  const removeSubject = (name: string) => {
+    const updated = currentSubjects.filter((s) => s.name !== name)
+    handleStepData(stepLabel, updated)
   }
 
   const imageContainer = (
@@ -102,22 +115,28 @@ const SubjectsStep = ({ btnsBox }) => {
           <AsyncAutocomplete
             labelField='name'
             onChange={onChangeCategory}
-            service={categoryServiceFn}
+            service={mockGetCategories}
+            /* TODO:  */
+            /*service={getCategoriesNames}*/
             textFieldProps={{
               label: t('becomeTutor.categories.mainSubjectsLabel')
             }}
-            value={subjects.category}
+            value={subjects.category?._id ?? null}
+            valueField='_id'
           />
           <AsyncAutocomplete
             disabled={!subjects.category}
             fetchCondition={!!subjects.category}
             labelField='name'
             onChange={onChangeSubject}
-            service={subjectsServiceFn}
+            service={mockGetSubjects(categoryId)}
+            /* TODO:  */
+            /*service={getSubjectsNames}*/
             textFieldProps={{
               label: t('becomeTutor.categories.subjectLabel')
             }}
-            value={subjects.subject}
+            value={subjects.subject?._id ?? null}
+            valueField='_id'
           />
           <Button fullWidth onClick={addSubject} variant='tonal'>
             {t('becomeTutor.categories.btnText')}
@@ -127,7 +146,7 @@ const SubjectsStep = ({ btnsBox }) => {
             handleChipDelete={removeSubject}
             items={subjectNames}
           />
-          <FormHelperText error={subjectError}>{subjectError}</FormHelperText>
+          <FormHelperText error={!!subjectError}>{subjectError}</FormHelperText>
         </Box>
         {btnsBox}
       </Box>

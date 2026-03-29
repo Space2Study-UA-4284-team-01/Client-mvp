@@ -9,7 +9,7 @@ export const mockGetCategories = () =>
     ]
   })
 
-export const mockGetSubjects = (categoryId) => () =>
+export const mockGetSubjects = (categoryId?: string) => () =>
   Promise.resolve({
     data:
       categoryId === '1'
