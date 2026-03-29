@@ -20,6 +20,9 @@ import { home } from '~/router/constants/crumbs'
 
 const HomeRoute = lazy(() => import('~/router/helpers/HomeRoute'))
 const Logout = lazy(() => import('~/pages/logout/Logout'))
+const GeneralInfoTest = lazy(
+  () => import('~/pages/general-info-test/GeneralInfoTest')
+) // TODO: remove this route
 
 export const routerConfig = (
   <Route
@@ -29,6 +32,8 @@ export const routerConfig = (
   >
     <Route element={<AppContent />} handle={{ crumb: home }}>
       <Route element={<HomeRoute />} index />
+      <Route element={<GeneralInfoTest />} path={'general-info-test'} />{' '}
+      {/* TODO: remove this route */}
       {guestRouter}
       {authRouter}
       {tutorRouter}

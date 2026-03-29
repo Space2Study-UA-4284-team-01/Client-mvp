@@ -42,16 +42,15 @@ export interface UserResponse {
   FAQ: DataByRole<Faq[]>
 }
 
-export interface UpdateUserParams
-  extends Pick<
-    UserResponse,
-    | 'photo'
-    | 'firstName'
-    | 'lastName'
-    | 'address'
-    | 'professionalSummary'
-    | 'nativeLanguage'
-  > {
+export interface UpdateUserParams extends Pick<
+  UserResponse,
+  | 'photo'
+  | 'firstName'
+  | 'lastName'
+  | 'address'
+  | 'professionalSummary'
+  | 'nativeLanguage'
+> {
   mainSubjects: SubjectNameInterface[]
 }
 
@@ -87,4 +86,13 @@ export interface AccessToken {
   id: string
   role: UserRole
   isFirstLogin: boolean
+}
+
+export interface UserGeneralInfo {
+  firstName: string
+  lastName: string
+  country: string | null
+  city: string | null
+  professionalSummary: string
+  isConfirmed: boolean
 }
