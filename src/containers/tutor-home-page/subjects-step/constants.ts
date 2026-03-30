@@ -1,38 +1,47 @@
 import { CategoryNameInterface, SubjectNameInterface } from '~/types'
 
+const makeCategory = (_id: string, name: string): CategoryNameInterface => ({
+  _id,
+  name
+})
+const makeSubject = (_id: string, name: string): SubjectNameInterface => ({
+  _id,
+  name
+})
+
 const subjectsByCategory: Record<string, SubjectNameInterface[]> = {
   '1': [
-    { _id: '11', name: 'Algebra' },
-    { _id: '12', name: 'Geometry' },
-    { _id: '13', name: 'Calculus' },
-    { _id: '14', name: 'Probability Theory' },
-    { _id: '15', name: 'Linear Algebra' }
+    makeSubject('11', 'Algebra'),
+    makeSubject('12', 'Geometry'),
+    makeSubject('13', 'Calculus'),
+    makeSubject('14', 'Probability Theory'),
+    makeSubject('15', 'Linear Algebra')
   ],
   '2': [
-    { _id: '21', name: 'Mechanics' },
-    { _id: '22', name: 'Optics' },
-    { _id: '23', name: 'Thermodynamics' },
-    { _id: '24', name: 'Electromagnetism' },
-    { _id: '25', name: 'Quantum Physics' }
+    makeSubject('21', 'Mechanics'),
+    makeSubject('22', 'Optics'),
+    makeSubject('23', 'Thermodynamics'),
+    makeSubject('24', 'Electromagnetism'),
+    makeSubject('25', 'Quantum Physics')
   ],
   '3': [
-    { _id: '31', name: 'Algorithms' },
-    { _id: '32', name: 'Data Structures' },
-    { _id: '33', name: 'Operating Systems' },
-    { _id: '34', name: 'Databases' },
-    { _id: '35', name: 'Computer Networks' }
+    makeSubject('31', 'Algorithms'),
+    makeSubject('32', 'Data Structures'),
+    makeSubject('33', 'Operating Systems'),
+    makeSubject('34', 'Databases'),
+    makeSubject('35', 'Computer Networks')
   ],
   '4': [
-    { _id: '41', name: 'Organic Chemistry' },
-    { _id: '42', name: 'Inorganic Chemistry' },
-    { _id: '43', name: 'Physical Chemistry' },
-    { _id: '44', name: 'Analytical Chemistry' }
+    makeSubject('41', 'Organic Chemistry'),
+    makeSubject('42', 'Inorganic Chemistry'),
+    makeSubject('43', 'Physical Chemistry'),
+    makeSubject('44', 'Analytical Chemistry')
   ],
   '5': [
-    { _id: '51', name: 'Cell Biology' },
-    { _id: '52', name: 'Genetics' },
-    { _id: '53', name: 'Ecology' },
-    { _id: '54', name: 'Human Anatomy' }
+    makeSubject('51', 'Cell Biology'),
+    makeSubject('52', 'Genetics'),
+    makeSubject('53', 'Ecology'),
+    makeSubject('54', 'Human Anatomy')
   ]
 }
 
@@ -41,11 +50,11 @@ export const mockGetCategories = (): Promise<{
 }> =>
   Promise.resolve({
     data: [
-      { _id: '1', name: 'Mathematics' },
-      { _id: '2', name: 'Physics' },
-      { _id: '3', name: 'Computer Science' },
-      { _id: '4', name: 'Chemistry' },
-      { _id: '5', name: 'Biology' }
+      makeCategory('1', 'Mathematics'),
+      makeCategory('2', 'Physics'),
+      makeCategory('3', 'Computer Science'),
+      makeCategory('4', 'Chemistry'),
+      makeCategory('5', 'Biology')
     ]
   })
 

@@ -3,22 +3,18 @@ import { useTranslation } from 'react-i18next'
 import { Box, Button, FormHelperText, Typography } from '@mui/material'
 
 import useBreakpoints from '~/hooks/use-breakpoints'
-
-// TODO: Replace mockGetCategories with categoryService.getCategoriesNames when auth is ready
-// import { subjectService } from '~/services/subject-service'
-// TODO: Replace mockGetSubjects with subjectService.getSubjectsNames when auth is ready
-// import { categoryService } from '~/services/category-service'
 import { useStepContext } from '~/context/step-context'
-
-import AsyncAutocomplete from '~/components/async-autocomlete/AsyncAutocomplete'
 import AppChipList from '~/components/app-chips-list/AppChipList'
-
+import CategorySubjectSelect from '~/components/category-subject-select/CategorySubjectSelect'
 import img from '~/assets/img/tutor-home-page/become-tutor/study-category.svg'
-import { styles } from '~/containers/tutor-home-page/subjects-step/SubjectsStep.styles'
-
-import { mockGetCategories, mockGetSubjects } from './constants'
-import { CategoryNameInterface, SubjectNameInterface } from '~/types'
 import { tutor } from '~/constants'
+import { CategoryNameInterface, SubjectNameInterface } from '~/types'
+
+// TODO: Replace with real services when auth is ready
+// import { categoryService } from '~/services/category-service'
+// import { subjectService } from '~/services/subject-service'
+import { mockGetCategories, mockGetSubjects } from './constants'
+import { styles } from '~/containers/tutor-home-page/subjects-step/SubjectsStep.styles'
 
 interface SubjectsStepProps {
   btnsBox?: ReactNode
@@ -117,31 +113,13 @@ const SubjectsStep = ({ btnsBox, stepLabel, userRole }: SubjectsStepProps) => {
         {isMobile && imageContainer}
         <Box sx={styles.contentBox}>
           <Typography>{t(`${namespace}.categories.title`)}</Typography>
-          <AsyncAutocomplete
-            labelField='name'
-            onChange={onChangeCategory}
-            service={mockGetCategories}
-            /* TODO: Wrap getSubjectsNames in useCallback with categoryId as dependency to avoid unnecessary refetches  */
-            /*service={getCategoriesNames}*/
-            textFieldProps={{
-              label: t(`${namespace}.categories.mainSubjectsLabel`)
-            }}
-            value={subjects.category?._id ?? null}
-            valueField='_id'
-          />
-          <AsyncAutocomplete
-            disabled={!subjects.category}
-            fetchCondition={!!subjects.category}
-            labelField='name'
-            onChange={onChangeSubject}
-            service={mockGetSubjects(categoryId)}
-            /* TODO: Remove mock imports from ./constants once real services are connected  */
-            /*service={getSubjectsNames}*/
-            textFieldProps={{
-              label: t(`${namespace}.categories.subjectLabel`)
-            }}
-            value={subjects.subject?._id ?? null}
-            valueField='_id'
+          <CategorySubjectSelect
+            categoryService={mockGetCategories}
+            namespace={namespace}
+            onChangeCategory={onChangeCategory}
+            onChangeSubject={onChangeSubject}
+            subjectService={mockGetSubjects(categoryId)}
+            subjects={subjects}
           />
           <Button fullWidth onClick={addSubject} variant='tonal'>
             {t(`${namespace}.categories.btnText`)}
