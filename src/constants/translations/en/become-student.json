@@ -1,0 +1,10 @@
+{
+  "categories": {
+    "title": "Please choose the main subjects based on the category. You can add others later.",
+    "mainSubjectsLabel": "Main Study Category",
+    "subjectLabel": "Subject",
+    "btnText": "Add one more subject",
+    "emptyFields": "All fields must be filled",
+    "sameSubject": "You have the same subject"
+  }
+}

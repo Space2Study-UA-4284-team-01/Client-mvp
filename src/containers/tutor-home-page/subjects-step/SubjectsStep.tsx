@@ -4,9 +4,9 @@ import { Box, Button, FormHelperText, Typography } from '@mui/material'
 
 import useBreakpoints from '~/hooks/use-breakpoints'
 
-//TODO:
+// TODO: Replace mockGetCategories with categoryService.getCategoriesNames when auth is ready
 // import { subjectService } from '~/services/subject-service'
-//TODO:
+// TODO: Replace mockGetSubjects with subjectService.getSubjectsNames when auth is ready
 // import { categoryService } from '~/services/category-service'
 import { useStepContext } from '~/context/step-context'
 
@@ -16,17 +16,19 @@ import AppChipList from '~/components/app-chips-list/AppChipList'
 import img from '~/assets/img/tutor-home-page/become-tutor/study-category.svg'
 import { styles } from '~/containers/tutor-home-page/subjects-step/SubjectsStep.styles'
 
-import { mockGetCategories } from './constants'
-import { mockGetSubjects } from './constants'
+import { mockGetCategories, mockGetSubjects } from './constants'
 import { CategoryNameInterface, SubjectNameInterface } from '~/types'
+import { tutor } from '~/constants'
 
 interface SubjectsStepProps {
   btnsBox?: ReactNode
   stepLabel: string
+  userRole: string
 }
 
-const SubjectsStep = ({ btnsBox, stepLabel }: SubjectsStepProps) => {
+const SubjectsStep = ({ btnsBox, stepLabel, userRole }: SubjectsStepProps) => {
   const { t } = useTranslation()
+  const namespace = userRole === tutor ? 'becomeTutor' : 'becomeStudent'
   const { isLaptopAndAbove, isMobile } = useBreakpoints()
   const [subjectError, setSubjectError] = useState<string>('')
   const [subjects, setSubjects] = useState<{
@@ -37,16 +39,15 @@ const SubjectsStep = ({ btnsBox, stepLabel }: SubjectsStepProps) => {
     subject: null
   })
 
+  //TODO: Remove after step context refactored to typescript
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
   const { stepData, handleStepData } = useStepContext()
-  const stepDataByLabel = stepData as unknown as Record<
-    string,
-    SubjectNameInterface[] | undefined
-  >
-  const currentSubjects = stepDataByLabel[stepLabel] ?? []
+  const currentSubjects =
+    (stepData as Record<string, SubjectNameInterface[]>)[stepLabel] ?? []
 
   const subjectNames = currentSubjects.map((s) => s.name)
 
-  //TODO:
+  //TODO: Replace mockGetCategories with categoryService.getCategoriesNames when auth is ready
   // const getCategoriesNames = categoryService.getCategoriesNames
 
   const categoryId = subjects.category?._id
@@ -61,9 +62,9 @@ const SubjectsStep = ({ btnsBox, stepLabel }: SubjectsStepProps) => {
     value: CategoryNameInterface | null
   ) => {
     setSubjects((prev) =>
-      prev.category?._id !== value?._id
-        ? { category: value, subject: null }
-        : prev
+      prev.category?._id === value?._id
+        ? prev
+        : { category: value, subject: null }
     )
   }
 
@@ -76,7 +77,7 @@ const SubjectsStep = ({ btnsBox, stepLabel }: SubjectsStepProps) => {
 
   const addSubject = () => {
     if (!subjects.subject || !subjects.category) {
-      setSubjectError(t('becomeTutor.categories.emptyFields'))
+      setSubjectError(t(`${namespace}.categories.emptyFields`))
       return
     }
 
@@ -85,10 +86,12 @@ const SubjectsStep = ({ btnsBox, stepLabel }: SubjectsStepProps) => {
     )
 
     if (isSameSubject) {
-      setSubjectError(t('becomeTutor.categories.sameSubject'))
+      setSubjectError(t(`${namespace}.categories.sameSubject`))
       return
     }
 
+    //TODO: Remove after step context refactored to typescript
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     handleStepData(stepLabel, [...currentSubjects, subjects.subject])
     setSubjectError('')
     setSubjects({ category: null, subject: null })
@@ -96,6 +99,8 @@ const SubjectsStep = ({ btnsBox, stepLabel }: SubjectsStepProps) => {
 
   const removeSubject = (name: string) => {
     const updated = currentSubjects.filter((s) => s.name !== name)
+    //TODO: Remove after step context refactored to typescript
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     handleStepData(stepLabel, updated)
   }
 
@@ -111,15 +116,15 @@ const SubjectsStep = ({ btnsBox, stepLabel }: SubjectsStepProps) => {
       <Box sx={styles.rightBox}>
         {isMobile && imageContainer}
         <Box sx={styles.contentBox}>
-          <Typography>{t('becomeTutor.categories.title')}</Typography>
+          <Typography>{t(`${namespace}.categories.title`)}</Typography>
           <AsyncAutocomplete
             labelField='name'
             onChange={onChangeCategory}
             service={mockGetCategories}
-            /* TODO:  */
+            /* TODO: Wrap getSubjectsNames in useCallback with categoryId as dependency to avoid unnecessary refetches  */
             /*service={getCategoriesNames}*/
             textFieldProps={{
-              label: t('becomeTutor.categories.mainSubjectsLabel')
+              label: t(`${namespace}.categories.mainSubjectsLabel`)
             }}
             value={subjects.category?._id ?? null}
             valueField='_id'
@@ -130,16 +135,16 @@ const SubjectsStep = ({ btnsBox, stepLabel }: SubjectsStepProps) => {
             labelField='name'
             onChange={onChangeSubject}
             service={mockGetSubjects(categoryId)}
-            /* TODO:  */
+            /* TODO: Remove mock imports from ./constants once real services are connected  */
             /*service={getSubjectsNames}*/
             textFieldProps={{
-              label: t('becomeTutor.categories.subjectLabel')
+              label: t(`${namespace}.categories.subjectLabel`)
             }}
             value={subjects.subject?._id ?? null}
             valueField='_id'
           />
           <Button fullWidth onClick={addSubject} variant='tonal'>
-            {t('becomeTutor.categories.btnText')}
+            {t(`${namespace}.categories.btnText`)}
           </Button>
           <AppChipList
             defaultQuantity={4}
