@@ -24,7 +24,7 @@ const CarouselWithImage: FC<CarouselWithImageProps> = ({ items }) => {
   const carouselWrapper = items.map((item) => (
     <Box data-testid='carousel' key={item.title} sx={styles.feature}>
       <Box
-        alt={item.image}
+        alt='carousel-image'
         component='img'
         src={item.image}
         sx={styles.image}
