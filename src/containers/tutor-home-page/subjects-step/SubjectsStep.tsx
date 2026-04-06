@@ -102,7 +102,7 @@ const SubjectsStep = ({ btnsBox, stepLabel, userRole }: SubjectsStepProps) => {
 
   const imageContainer = (
     <Box sx={styles.imgContainer}>
-      <Box component='img' src={img} sx={styles.img} />
+      <Box alt='' component='img' src={img} sx={styles.img} />
     </Box>
   )
 

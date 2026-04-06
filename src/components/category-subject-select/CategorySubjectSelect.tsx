@@ -17,8 +17,8 @@ interface CategorySubjectSelectProps {
     _: SyntheticEvent,
     value: SubjectNameInterface | null
   ) => void
-  categoryService: () => Promise<CategoryNameInterface[]>
-  subjectService: () => Promise<SubjectNameInterface[]>
+  categoryService: () => Promise<{ data: CategoryNameInterface[] }>
+  subjectService: () => Promise<{ data: SubjectNameInterface[] }>
 }
 
 const CategorySubjectSelect = ({
