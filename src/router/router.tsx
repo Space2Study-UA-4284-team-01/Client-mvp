@@ -17,6 +17,7 @@ import { studentRouter } from '~/router/routes/studentRouter'
 import { guestRouter } from '~/router/routes/guestRouter'
 import { authRouter } from '~/router/routes/authRouter'
 import { home } from '~/router/constants/crumbs'
+import StepperPopupTest from '~/pages/stepper-popup-test/StepperPopupTest'
 
 const HomeRoute = lazy(() => import('~/router/helpers/HomeRoute'))
 const Logout = lazy(() => import('~/pages/logout/Logout'))
@@ -29,6 +30,7 @@ export const routerConfig = (
   >
     <Route element={<AppContent />} handle={{ crumb: home }}>
       <Route element={<HomeRoute />} index />
+      <Route element={<StepperPopupTest />} path={'stepper-popup-test'} />
       {guestRouter}
       {authRouter}
       {tutorRouter}

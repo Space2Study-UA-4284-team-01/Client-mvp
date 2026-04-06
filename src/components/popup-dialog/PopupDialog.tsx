@@ -31,7 +31,7 @@ const PopupDialog: FC<PopupDialogProps> = ({
   const handleMouseLeave = () => timerId && closeModalAfterDelay()
   const handleCloseClick = () => {
     const fn = onCloseRequest ?? closeModal
-    void fn()
+    void Promise.resolve(fn()).catch(console.error)
   }
 
   return (
