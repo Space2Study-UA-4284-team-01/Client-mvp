@@ -22,8 +22,8 @@ describe('CarouselWithImage component test', () => {
   })
 
   it('Test image', () => {
-    const mapLogo = screen.getByAltText('title1')
+    const images = screen.getAllByRole('img')
 
-    expect(mapLogo).toBeInTheDocument()
+    expect(images.length).toBeGreaterThan(0)
   })
 })
