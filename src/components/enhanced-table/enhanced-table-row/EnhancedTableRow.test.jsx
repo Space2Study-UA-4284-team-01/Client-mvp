@@ -1,5 +1,5 @@
 import { render, screen, fireEvent } from '@testing-library/react'
-import { describe, test, expect, vi } from 'vitest'
+import { describe, test, expect, vi, beforeEach } from 'vitest'
 import EnhancedTableRow from './EnhancedTableRow'
 
 vi.mock('react-i18next', () => ({
@@ -36,6 +36,10 @@ const baseProps = {
 }
 
 describe('EnhancedTableRow', () => {
+  beforeEach(() => {
+    vi.clearAllMocks()
+  })
+
   test('it should render table row with correct data', () => {
     render(<EnhancedTableRow {...baseProps} />)
 
