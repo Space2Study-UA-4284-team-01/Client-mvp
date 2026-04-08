@@ -8,8 +8,11 @@ export const guestRoutes = {
   about: { route: 'about', path: 'about' },
   privacyPolicy: { route: 'privacy-policy', path: 'privacy-policy' },
   termOfUse: { route: '#', path: '#' },
+  test: {
+    photoStep: { route: 'test/photo-step', path: 'test/photo-step' }
+  },
   navBar: {
-    whatCanYouDo: { route: 'what-сan-you-do', path: '/#what-сan-you-do' },
+    whatCanYouDo: { route: 'what-can-you-do', path: '/#what-can-you-do' },
     howItWorks: { route: 'how-it-works', path: '/#how-it-works' },
     whoWeAre: { route: 'who-we-are', path: '/#who-we-are' }
   }
