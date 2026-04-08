@@ -175,12 +175,14 @@ const CreateOrEditQuestion = () => {
     <PageWrapper>
       <Box component={ComponentEnum.Form} onSubmit={handleSubmit}>
         <AppTextField
-          InputLabelProps={styles.titleLabel(title)}
           InputProps={styles.titleInput}
           fullWidth
-          inputProps={styles.input}
-          label={t('questionPage.untitled')}
+          inputProps={{
+            ...styles.input,
+            'aria-label': 'questionPage.untitled'
+          }}
           onChange={handleInputChange('title')}
+          placeholder='Untitled'
           value={title}
           variant={TextFieldVariantEnum.Standard}
         />
