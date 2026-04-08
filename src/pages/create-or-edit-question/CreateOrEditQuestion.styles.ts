@@ -22,7 +22,7 @@ export const styles = {
   },
   titleInput: {
     disableUnderline: true,
-    style: { ...inputFontSize }
+    style: { ...inputFontSize, color: palette.primary[300] }
   },
   titleLabel: (value: string) => ({
     shrink: false,
