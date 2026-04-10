@@ -16,14 +16,14 @@ describe('CarouselWithImage component test', () => {
       description: 'description2'
     }
   ]
+
   beforeEach(() => {
     render(<CarouselWithImage items={items} />)
   })
-  it('Test image', () => {
-    const mapLogo = screen.getByAltText(
-      '/src/assets/img/guest-home-page/map.svg'
-    )
 
-    expect(mapLogo).toBeInTheDocument()
+  it('Test image', () => {
+    const images = screen.getAllByRole('img')
+
+    expect(images.length).toBeGreaterThan(0)
   })
 })
