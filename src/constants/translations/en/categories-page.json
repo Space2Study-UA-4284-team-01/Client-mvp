@@ -1,6 +1,17 @@
 {
   "title": "Categories",
   "description": "Explore categories you're passionate about.",
+  "privateLessonsBanner": {
+    "title": {
+      "tutor": "Students for private lessons",
+      "student": "Tutors for private lessons"
+    },
+    "description": "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.",
+    "button": {
+      "tutor": "Create offer",
+      "student": "Create request"
+    }
+  },
   "showAllOffers": "Show all offers",
   "searchLabel": "What would you like to learn?",
   "viewMore": "View more",
