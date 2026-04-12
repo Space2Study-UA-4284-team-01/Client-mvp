@@ -2,12 +2,15 @@ import Box from '@mui/material/Box'
 import Typography from '@mui/material/Typography'
 import Checkbox from '@mui/material/Checkbox'
 import FormControlLabel from '@mui/material/FormControlLabel'
-import { useEffect, useRef } from 'react'
+import { useCallback, useEffect, useRef } from 'react'
 import { useTranslation } from 'react-i18next'
 import useBreakpoints from '~/hooks/use-breakpoints'
 import useForm from '~/hooks/use-form'
+import useAxios from '~/hooks/use-axios'
+import { useAppSelector } from '~/hooks/use-redux'
 import { useStepContext } from '~/context/step-context'
-import { type UserGeneralInfo } from '~/types'
+import { userService } from '~/services/user-service'
+import { type UserGeneralInfo, type UserResponse, type UserRole } from '~/types'
 import img from '~/assets/img/tutor-home-page/become-tutor/general-info.svg'
 import AppTextArea from '~/components/app-text-area/AppTextArea'
 import AppTextField from '~/components/app-text-field/AppTextField'
@@ -23,11 +26,22 @@ interface GeneralInfoStepProps {
 const GeneralInfoStep: React.FC<GeneralInfoStepProps> = ({ btnsBox }) => {
   const { t } = useTranslation()
   const { isMobile } = useBreakpoints()
+  const { userId, userRole } = useAppSelector((state) => state.appMain)
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { stepData, handleStepData } = useStepContext()
-  const isFirstRender = useRef<boolean>(true)
+  const isProfileSynced = useRef(false)
 
-  const loading = false
+  const getUserProfile = useCallback(
+    () => userService.getUserById(userId, userRole as UserRole),
+    [userId, userRole]
+  )
+
+  const { loading, response } = useAxios<UserResponse>({
+    service: getUserProfile,
+    fetchOnMount: Boolean(userId && userRole),
+    defaultResponse: null as unknown as UserResponse
+  })
+
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
   const generalInfo = stepData.generalInfo as {
     data: UserGeneralInfo
@@ -54,13 +68,31 @@ const GeneralInfoStep: React.FC<GeneralInfoStepProps> = ({ btnsBox }) => {
   })
 
   useEffect(() => {
-    const response = { firstName: 'John', lastName: 'Doe' }
-    if (isFirstRender.current) {
-      handleNonInputValueChange('firstName', response.firstName)
-      handleNonInputValueChange('lastName', response.lastName)
-      isFirstRender.current = false
+    if (!response?._id || isProfileSynced.current) {
+      return
     }
-  }, [handleNonInputValueChange])
+
+    handleNonInputValueChange('firstName', response.firstName ?? '')
+    handleNonInputValueChange('lastName', response.lastName ?? '')
+
+    const country = response.address?.country?.trim() || null
+    const city = response.address?.city?.trim() || null
+    if (country) {
+      handleNonInputValueChange('country', country)
+    }
+    if (city && country) {
+      handleNonInputValueChange('city', city)
+    }
+
+    if (response.professionalSummary) {
+      handleNonInputValueChange(
+        'professionalSummary',
+        response.professionalSummary
+      )
+    }
+
+    isProfileSynced.current = true
+  }, [response, handleNonInputValueChange])
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call

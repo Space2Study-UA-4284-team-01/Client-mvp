@@ -1,4 +1,8 @@
-import { PayloadAction, createSlice, isAnyOf } from '@reduxjs/toolkit'
+import {
+  PayloadAction,
+  createSlice
+  //isAnyOf
+} from '@reduxjs/toolkit'
 import { parseJwt } from '~/utils/helper-functions'
 import {
   createAsyncThunk,
@@ -6,7 +10,10 @@ import {
   isFulfilled,
   isRejected
 } from '@reduxjs/toolkit'
-import { AuthService, authService } from '~/services/auth-service'
+import {
+  AuthService
+  //authService
+} from '~/services/auth-service'
 import { AxiosError } from 'axios'
 import { AccessToken, ErrorResponse, UserRole } from '~/types'
 
@@ -80,6 +87,23 @@ export const mainSlice = createSlice({
   },
   extraReducers: (builder) => {
     builder.addMatcher(isPending, (state, action) => {
+      if (checkAuth.pending.match(action)) {
+        state.loading = true
+      } else {
+        state.authLoading = true
+      }
+      state.error = ''
+    })
+    builder.addMatcher(isFulfilled, (state, action) => {
+      if (checkAuth.fulfilled.match(action)) {
+        state.loading = false
+      } else {
+        state.authLoading = false
+      }
+      state.error = ''
+    })
+    /*extraReducers: (builder) => {
+    builder.addMatcher(isPending, (state, action) => {
       if (
         isAnyOf(
           checkAuth.pending,
@@ -104,7 +128,7 @@ export const mainSlice = createSlice({
         state.authLoading = false
       }
       state.error = ''
-    })
+    })*/
     builder.addMatcher(isRejected, (state, action) => {
       state.loading = false
       state.authLoading = false

@@ -28,37 +28,45 @@ const LocationSelectionInputs: React.FC<LocationSelectionInputsProps> = ({
 
   const handleCountryChange = (
     _: React.SyntheticEvent,
-    value: string | null
+    value: { name: string; iso2: string } | null
   ) => {
-    onDataChange('country', value)
+    onDataChange('country', value?.iso2 ?? null)
     onDataChange('city', null)
   }
 
-  const handleCityChange = (_: React.SyntheticEvent, value: string | null) => {
-    onDataChange('city', value)
+  const handleCityChange = (
+    _: React.SyntheticEvent,
+    value: { name: string } | null
+  ) => {
+    onDataChange('city', value?.name ?? null)
   }
 
   return (
     <>
-      <AsyncAutocomplete
+      <AsyncAutocomplete<{ name: string; iso2: string }>
         fetchOnFocus={false}
         fullWidth
+        labelField='name'
         onChange={handleCountryChange}
         service={getCountries}
         sx={sx}
         textFieldProps={{ label: t('common.labels.country') }}
         value={data.country}
+        valueField='iso2'
       />
-      <AsyncAutocomplete
+      <AsyncAutocomplete<{ name: string }>
         disabled={!data.country}
         fetchCondition={!!data.country}
-        fetchOnFocus={!data.city}
+        fetchOnFocus
         fullWidth
+        key={data.country ?? 'city'}
+        labelField='name'
         onChange={handleCityChange}
         service={getCities}
         sx={sx}
         textFieldProps={{ label: t('common.labels.city') }}
         value={data.city}
+        valueField='name'
       />
     </>
   )
