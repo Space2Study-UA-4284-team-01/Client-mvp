@@ -6,8 +6,8 @@ import {
 import { parseJwt } from '~/utils/helper-functions'
 import {
   createAsyncThunk,
-  isPending,
-  isFulfilled,
+  //isPending,
+  //isFulfilled,
   isRejected
 } from '@reduxjs/toolkit'
 import {
@@ -86,25 +86,16 @@ export const mainSlice = createSlice({
     }
   },
   extraReducers: (builder) => {
-    builder.addMatcher(isPending, (state, action) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      if (checkAuth.pending.match(action)) {
-        state.loading = true
-      } else {
-        state.authLoading = true
-      }
+    builder.addMatcher(checkAuth.pending.match, (state) => {
+      state.loading = true
       state.error = ''
     })
-    builder.addMatcher(isFulfilled, (state, action) => {
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
-      if (checkAuth.fulfilled.match(action)) {
-        state.loading = false
-      } else {
-        state.authLoading = false
-      }
+    builder.addMatcher(checkAuth.fulfilled.match, (state) => {
+      state.loading = false
       state.error = ''
     })
     /*extraReducers: (builder) => {
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-call, @typescript-eslint/no-unsafe-member-access
     builder.addMatcher(isPending, (state, action) => {
       if (
         isAnyOf(

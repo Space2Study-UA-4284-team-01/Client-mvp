@@ -1,18 +1,29 @@
 export const locationService = {
   getCountries: () => {
     return Promise.resolve({
-      data: ['Ukraine', 'Poland', 'Germany', 'USA', 'UK']
+      data: [
+        { name: 'Ukraine', iso2: 'UA' },
+        { name: 'Poland', iso2: 'PL' },
+        { name: 'Germany', iso2: 'DE' },
+        { name: 'United States', iso2: 'US' },
+        { name: 'United Kingdom', iso2: 'GB' }
+      ]
     })
   },
-  getCitiesByCountry: (country: string) => {
-    const cities: Record<string, string[]> = {
-      Ukraine: ['Kyiv', 'Lviv', 'Odesa', 'Kharkiv'],
-      Poland: ['Warsaw', 'Krakow', 'Gdansk'],
-      Germany: ['Berlin', 'Munich', 'Hamburg'],
-      USA: ['New York', 'Los Angeles', 'Chicago'],
-      UK: ['London', 'Manchester', 'Birmingham']
+  getCitiesByCountry: (countryIso: string) => {
+    const cities: Record<string, { name: string }[]> = {
+      UA: [
+        { name: 'Kyiv' },
+        { name: 'Lviv' },
+        { name: 'Odesa' },
+        { name: 'Kharkiv' }
+      ],
+      PL: [{ name: 'Warsaw' }, { name: 'Krakow' }, { name: 'Gdansk' }],
+      DE: [{ name: 'Berlin' }, { name: 'Munich' }, { name: 'Hamburg' }],
+      US: [{ name: 'New York' }, { name: 'Los Angeles' }, { name: 'Chicago' }],
+      GB: [{ name: 'London' }, { name: 'Manchester' }, { name: 'Birmingham' }]
     }
-    return Promise.resolve({ data: cities[country] ?? [] })
+    return Promise.resolve({ data: cities[countryIso] ?? [] })
   }
 }
 

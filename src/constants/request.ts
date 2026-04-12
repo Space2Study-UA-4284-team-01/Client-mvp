@@ -28,8 +28,9 @@ export const URLs = {
     getNames: '/subjects/names'
   },
   location: {
-    countries: 'location/countries',
-    cities: 'location/cities'
+    countries: '/location/countries',
+    citiesByCountry: (countryIso: string) =>
+      `/location/countries/${countryIso}/cities`
   },
   resources: {
     questions: {
