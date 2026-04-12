@@ -69,14 +69,20 @@ const GeneralInfoStep: React.FC<GeneralInfoStepProps> = ({ btnsBox }) => {
     validations
   })
 
+  const hasPersistedGeneralInfo = Boolean(
+    generalInfo?.data?.firstName ||
+    generalInfo?.data?.lastName ||
+    generalInfo?.data?.country ||
+    generalInfo?.data?.city ||
+    generalInfo?.data?.professionalSummary ||
+    generalInfo?.data?.isConfirmed
+  )
   useEffect(() => {
-    if (!response?._id || isProfileSynced.current) {
+    if (!response?._id || isProfileSynced.current || hasPersistedGeneralInfo) {
       return
     }
-
     handleNonInputValueChange('firstName', response.firstName ?? '')
     handleNonInputValueChange('lastName', response.lastName ?? '')
-
     const country = response.address?.country?.trim() || null
     const city = response.address?.city?.trim() || null
     if (country) {
@@ -85,16 +91,14 @@ const GeneralInfoStep: React.FC<GeneralInfoStepProps> = ({ btnsBox }) => {
     if (city && country) {
       handleNonInputValueChange('city', city)
     }
-
     if (response.professionalSummary) {
       handleNonInputValueChange(
         'professionalSummary',
         response.professionalSummary
       )
     }
-
     isProfileSynced.current = true
-  }, [response, handleNonInputValueChange])
+  }, [response, handleNonInputValueChange, hasPersistedGeneralInfo])
 
   useEffect(() => {
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
