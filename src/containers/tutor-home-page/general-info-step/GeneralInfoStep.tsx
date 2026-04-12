@@ -26,12 +26,14 @@ interface GeneralInfoStepProps {
 const GeneralInfoStep: React.FC<GeneralInfoStepProps> = ({ btnsBox }) => {
   const { t } = useTranslation()
   const { isMobile } = useBreakpoints()
+  // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access, @typescript-eslint/no-unsafe-return
   const { userId, userRole } = useAppSelector((state) => state.appMain)
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { stepData, handleStepData } = useStepContext()
   const isProfileSynced = useRef(false)
 
   const getUserProfile = useCallback(
+    // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
     () => userService.getUserById(userId, userRole as UserRole),
     [userId, userRole]
   )
