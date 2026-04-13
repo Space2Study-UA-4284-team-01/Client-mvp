@@ -1,4 +1,4 @@
-import { Box, Typography } from '@mui/material'
+import { Box, FormHelperText, Typography } from '@mui/material'
 import { useTranslation } from 'react-i18next'
 import DragAndDrop from '~/components/drag-and-drop/DragAndDrop'
 import FileUploader from '~/components/file-uploader/FileUploader'
@@ -8,38 +8,43 @@ import { useStepContext } from '~/context/step-context'
 import useBreakpoints from '~/hooks/use-breakpoints'
 import { validationData } from './constants'
 import { imageResize } from '~/utils/image-resize'
+import { useRef, useState } from 'react'
 
 const AddPhotoStep = ({ btnsBox }) => {
   const { t } = useTranslation()
+  const [photoError, setPhotoError] = useState('')
   const { isLaptopAndAbove, isTablet, isMobile } = useBreakpoints()
   const { stepData, handleStepData } = useStepContext()
+  const jobId = useRef(0)
 
   const photo = stepData.photo
 
-  const addPhoto = async ({ files }) => {
-    if (files.length && !files[0].src) {
-      await resizePhoto(files[0])
-    } else {
-      handleStepData('photo', files)
+  const handleAddPhoto = async ({ files, error }) => {
+    if (error) {
+      setPhotoError(error)
+      return
     }
-  }
 
-  const handleAddPhoto = async (photo) => {
-    await addPhoto(photo)
-  }
+    setPhotoError('')
 
-  const resizePhoto = async (file) => {
-    const photoPath = URL.createObjectURL(file)
-    const photoSizes = { newWidth: 440, newHeight: 440 }
-    const resizedPhoto = await imageResize(photoPath, photoSizes)
-    const photoName = file.name
+    if (!files.length || files[0].src) {
+      handleStepData('photo', files)
+      return
+    }
 
-    handleStepData('photo', [
-      {
-        name: photoName,
-        src: resizedPhoto
+    const myJob = ++jobId.current
+    const photoPath = URL.createObjectURL(files[0])
+    try {
+      const resizedPhoto = await imageResize(photoPath, {
+        newWidth: 440,
+        newHeight: 440
+      })
+      if (myJob === jobId.current) {
+        handleStepData('photo', [{ name: files[0].name, src: resizedPhoto }])
       }
-    ])
+    } finally {
+      URL.revokeObjectURL(photoPath)
+    }
   }
 
   const photoPreview = photo?.length ? (
@@ -72,6 +77,7 @@ const AddPhotoStep = ({ btnsBox }) => {
           <FileUploader
             buttonText={t('becomeTutor.photo.button')}
             emitter={handleAddPhoto}
+            initialError={photoError}
             initialState={photo}
             isImages
             sx={style.fileUploader}
