@@ -15,35 +15,6 @@ import TextField from '@mui/material/TextField'
 import Typography from '@mui/material/Typography'
 import { styles } from '~/components/category-subject-select/CategorySubjectSelect.styles'
 
-const categoryOptions = [
-  { value: 'mathematics', label: 'Mathematics', category: 'Mathematics' },
-  { value: 'marketing', label: 'Marketing Strategy', category: 'Marketing' },
-  { value: 'music', label: 'Marimba', category: 'Music' },
-  { value: 'design', label: 'Motion Design', category: 'Design' },
-  { value: 'management', label: 'Product Management', category: 'Management' },
-  {
-    value: 'higher-mathematics',
-    label: 'Higher Mathematics',
-    category: 'Mathematics'
-  }
-]
-
-const subjectOptionsMap: Record<string, string[]> = {
-  mathematics: [
-    'Botany',
-    'Biochemistry',
-    'Genetics',
-    'Anatomy',
-    'SAT',
-    'Zoology'
-  ],
-  marketing: ['Marketing Strategy', 'Branding', 'SMM'],
-  music: ['Marimba', 'Piano', 'Guitar'],
-  design: ['Motion Design', 'UI Design', 'Graphic Design'],
-  management: ['Product Management', 'Project Management'],
-  'higher-mathematics': ['Algebra', 'Geometry', 'Calculus']
-}
-
 export interface CategoryOption {
   value: string
   label: string
@@ -51,6 +22,8 @@ export interface CategoryOption {
 }
 
 interface CategorySubjectSelectProps {
+  categories: string[]
+  subjects: string[]
   selectedCategory: CategoryOption | null
   subject: string
   setSelectedCategory: Dispatch<SetStateAction<CategoryOption | null>>
@@ -58,6 +31,8 @@ interface CategorySubjectSelectProps {
 }
 
 const CategorySubjectSelect = ({
+  categories,
+  subjects,
   selectedCategory,
   subject,
   setSelectedCategory,
@@ -66,10 +41,11 @@ const CategorySubjectSelect = ({
   const [isCategoryOpen, setIsCategoryOpen] = useState(false)
   const [isSubjectOpen, setIsSubjectOpen] = useState(false)
 
-  const subjectOptions = useMemo(() => {
-    if (!selectedCategory) return []
-    return subjectOptionsMap[selectedCategory.value] ?? []
-  }, [selectedCategory])
+  const categoryOptions: CategoryOption[] = useMemo(
+    () =>
+      categories.map((name) => ({ value: name, label: name, category: name })),
+    [categories]
+  )
 
   const handleCategoryChange = (
     _: SyntheticEvent,
@@ -144,9 +120,9 @@ const CategorySubjectSelect = ({
         sx={styles.select}
         value={subject}
       >
-        {subjectOptions.map((opt) => (
-          <MenuItem key={opt} value={opt}>
-            {opt}
+        {subjects.map((s) => (
+          <MenuItem key={s} value={s}>
+            {s}
           </MenuItem>
         ))}
       </TextField>

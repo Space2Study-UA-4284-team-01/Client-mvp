@@ -1,7 +1,6 @@
-import { useState, ReactNode } from 'react'
+import { useState, ReactNode, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import { Box, Button, FormHelperText, Typography } from '@mui/material'
-
 import useBreakpoints from '~/hooks/use-breakpoints'
 import { useStepContext } from '~/context/step-context'
 import CategorySubjectSelect from '~/components/category-subject-select/CategorySubjectSelect'
@@ -9,6 +8,7 @@ import SubjectStepperChips from '~/components/subject-stepper-chips/SubjectStepp
 import img from '~/assets/img/tutor-home-page/become-tutor/study-category.svg'
 import { tutor } from '~/constants'
 import { SubjectNameInterface } from '~/types'
+import { categoryService } from '~/services/category-service'
 import type { CategoryOption } from '~/components/category-subject-select/CategorySubjectSelect'
 import { styles } from '~/containers/tutor-home-page/subjects-step/SubjectsStep.styles'
 
@@ -26,6 +26,13 @@ const SubjectsStep = ({ btnsBox, stepLabel, userRole }: SubjectsStepProps) => {
   const [selectedCategory, setSelectedCategory] =
     useState<CategoryOption | null>(null)
   const [subject, setSubject] = useState<string>('')
+  const [categories, setCategories] = useState<string[]>([])
+
+  useEffect(() => {
+    void categoryService.getCategoriesNames().then((res) => {
+      setCategories((res.data as { data: string[] }).data)
+    })
+  }, [])
 
   //TODO: Remove after step context refactored to typescript
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-member-access
@@ -40,19 +47,15 @@ const SubjectsStep = ({ btnsBox, stepLabel, userRole }: SubjectsStepProps) => {
       setSubjectError(t(`${namespace}.categories.emptyFields`))
       return
     }
-
     const isSameSubject = currentSubjects.some((s) => s.name === subject)
-
     if (isSameSubject) {
       setSubjectError(t(`${namespace}.categories.sameSubject`))
       return
     }
-
     const nextSubjects: SubjectNameInterface[] = [
       ...currentSubjects,
       { _id: subject, name: subject }
     ]
-
     //TODO: Remove after step context refactored to typescript
     // eslint-disable-next-line @typescript-eslint/no-unsafe-call
     handleStepData(stepLabel, nextSubjects)
@@ -81,10 +84,12 @@ const SubjectsStep = ({ btnsBox, stepLabel, userRole }: SubjectsStepProps) => {
         <Box sx={styles.contentBox}>
           <Typography>{t(`${namespace}.categories.title`)}</Typography>
           <CategorySubjectSelect
+            categories={categories}
             selectedCategory={selectedCategory}
             setSelectedCategory={setSelectedCategory}
             setSubject={setSubject}
             subject={subject}
+            subjects={[]}
           />
           <Button fullWidth onClick={addSubject} variant='tonal'>
             {t(`${namespace}.categories.btnText`)}
