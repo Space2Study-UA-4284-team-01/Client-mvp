@@ -12,8 +12,8 @@ const RoleSwitcher = ({ authorRole, onChange }: RoleSwitcherProps) => {
   const { t } = useTranslation()
 
   const switchRoleOptions: SwitchOptions = {
-    left: { text: t('topMenu.tutorsOffers') },
-    right: { text: t('topMenu.studentsRequests') }
+    left: { text: t('findOffers.topMenu.tutorsOffers') },
+    right: { text: t('findOffers.topMenu.studentsRequests') }
   }
 
   const handleChangeRole = () => {
