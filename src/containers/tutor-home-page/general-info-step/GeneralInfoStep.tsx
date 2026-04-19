@@ -11,6 +11,7 @@ import { useAppSelector } from '~/hooks/use-redux'
 import { useStepContext } from '~/context/step-context'
 import { userService } from '~/services/user-service'
 import { type UserGeneralInfo, type UserResponse, type UserRole } from '~/types'
+import { UserRoleEnum } from '~/types'
 import img from '~/assets/img/tutor-home-page/become-tutor/general-info.svg'
 import AppTextArea from '~/components/app-text-area/AppTextArea'
 import AppTextField from '~/components/app-text-field/AppTextField'
@@ -31,6 +32,9 @@ const GeneralInfoStep: React.FC<GeneralInfoStepProps> = ({ btnsBox }) => {
   // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
   const { stepData, handleStepData } = useStepContext()
   const isProfileSynced = useRef(false)
+
+  const translationKey =
+    userRole === UserRoleEnum.Student ? 'becomeStudent' : 'becomeTutor'
 
   const getUserProfile = useCallback(
     // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
@@ -77,6 +81,7 @@ const GeneralInfoStep: React.FC<GeneralInfoStepProps> = ({ btnsBox }) => {
     generalInfo?.data?.professionalSummary ||
     generalInfo?.data?.isConfirmed
   )
+
   useEffect(() => {
     if (!response?._id || isProfileSynced.current || hasPersistedGeneralInfo) {
       return
@@ -108,9 +113,9 @@ const GeneralInfoStep: React.FC<GeneralInfoStepProps> = ({ btnsBox }) => {
   useEffect(() => {
     handleErrors(
       'isConfirmed',
-      data.isConfirmed ? '' : 'becomeTutor.generalInfo.confirmAgeError'
+      data.isConfirmed ? '' : `${translationKey}.generalInfo.confirmAgeError`
     )
-  }, [data.isConfirmed, handleErrors])
+  }, [data.isConfirmed, handleErrors, translationKey])
 
   if (loading) {
     return (
@@ -128,7 +133,9 @@ const GeneralInfoStep: React.FC<GeneralInfoStepProps> = ({ btnsBox }) => {
         </Box>
       )}
       <Box component='form' sx={styles.form}>
-        <Typography mb='20px'>{t('becomeTutor.generalInfo.title')}</Typography>
+        <Typography mb='20px'>
+          {t(`${translationKey}.generalInfo.title`)}
+        </Typography>
         {isMobile && (
           <Box sx={styles.imgContainer}>
             <Box component='img' src={img} sx={styles.img} />
@@ -173,7 +180,7 @@ const GeneralInfoStep: React.FC<GeneralInfoStepProps> = ({ btnsBox }) => {
         </Box>
         <AppTextArea
           fullWidth
-          label={t('becomeTutor.generalInfo.textFieldLabel')}
+          label={t(`${translationKey}.generalInfo.textFieldLabel`)}
           maxLength={200}
           onChange={handleInputChange('professionalSummary')}
           sx={{ mt: '30px' }}
@@ -189,11 +196,11 @@ const GeneralInfoStep: React.FC<GeneralInfoStepProps> = ({ btnsBox }) => {
               }
             />
           }
-          label={t('becomeTutor.generalInfo.confirmAge')}
+          label={t(`${translationKey}.generalInfo.confirmAge`)}
           sx={{ mt: '8px' }}
         />
         <Typography variant='caption'>
-          {t('becomeTutor.generalInfo.helperText')}
+          {t(`${translationKey}.generalInfo.helperText`)}
         </Typography>
         {btnsBox}
       </Box>
