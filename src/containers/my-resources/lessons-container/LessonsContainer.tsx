@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react'
+import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Box from '@mui/material/Box'
 import AddIcon from '@mui/icons-material/Add'
@@ -38,6 +38,8 @@ const LessonsContainer = () => {
   const breakpoints = useBreakpoints()
   const { page, handleChangePage } = usePagination()
   const { setAlert } = useSnackBarContext()
+
+  const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
   const { sort } = sortOptions
   const itemsPerPage = getScreenBasedLimit(breakpoints, itemsLoadLimit)
@@ -91,6 +93,7 @@ const LessonsContainer = () => {
     sort: sortOptions,
     itemsPerPage,
     resource: ResourcesTabsEnum.Lessons,
+    actions: { onEdit: () => void 0 },
     sx: styles.table
   }
 
@@ -106,14 +109,13 @@ const LessonsContainer = () => {
         }
         fetchData={fetchData}
         searchRef={searchTitle}
+        selectedItems={selectedCategories}
+        setItems={setSelectedCategories}
       />
       {loading ? (
         <Loader pageLoad size={50} />
       ) : (
-        <MyResourcesTable<Lesson>
-          {...props}
-          actions={{ onEdit: () => void 0 }}
-        />
+        <MyResourcesTable<Lesson> {...props} />
       )}
     </Box>
   )
