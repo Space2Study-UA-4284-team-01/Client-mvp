@@ -21,9 +21,9 @@ const EnumFilter = ({ column, filter, setFilter, clearFilter }) => {
 
   const endAdornment = (
     <IconButton
-      className={filter.length ? 'visible' : 'hidden'}
       data-testid='clear-icon-in-filter'
       onClick={clearFilter}
+      style={filter.length ? 'visible' : 'hidden'}
     >
       <ClearIcon color='primary' />
     </IconButton>
