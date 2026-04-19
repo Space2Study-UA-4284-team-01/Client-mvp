@@ -4,7 +4,7 @@ import TextField from '@mui/material/TextField'
 import { SxProps, Theme } from '@mui/material/styles'
 
 import { LanguagesEnum } from '~/types'
-import { styles } from '~/components/language-select-dropdowwn/LanguageSelectDropdown.styles'
+import { styles } from '~/components/language-select-dropdown/LanguageSelectDropdown.styles'
 
 const BATCH_SIZE = 6
 
