@@ -10,7 +10,8 @@ import {
   Question,
   Categories,
   ScreenBasedLimits,
-  RemoveColumnRules
+  RemoveColumnRules,
+  Lesson
 } from '~/types'
 
 export const parseJwt = <T,>(token: string): T => {
@@ -116,7 +117,7 @@ export const getScreenBasedLimit = (
   }
 }
 
-export const ajustColumns = <T extends Question | Categories>(
+export const ajustColumns = <T extends Question | Lesson | Categories>(
   breakpoints: Breakpoints,
   columns: TableColumn<T>[],
   rules: RemoveColumnRules<T>

@@ -1,0 +1,13 @@
+{
+    "labels": {
+      "title": "Назва",
+      "description": "Опис",
+      "attachments": "Додати вкладення"
+    },
+    "errorMessages": {
+      "title": "Назва обов'язкова",
+      "description": "Опис обов'язковий"
+    },
+    "successAddedLesson": "Урок успішно додано",
+    "successEditedLesson": "Урок успішно відредаговано"
+  }

@@ -15,6 +15,10 @@ export const authRoutes = {
     editQuestion: {
       route: 'my-resources/edit-question/:id',
       path: '/my-resources/edit-question'
+    },
+    lessons: {
+      route: 'my-resources/lessons',
+      path: '/my-resources/lessons'
     }
   },
   accountMenu: {
