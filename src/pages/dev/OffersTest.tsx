@@ -100,9 +100,9 @@ const FindOffersTest = () => {
           <OfferCard
             key={offer._id}
             offer={offer}
-            onAddToFavorites={handleAddToFavorites}
             onSendMessage={handleSendMessage}
             onShowDetails={handleShowDetails}
+            onToggleFavorite={handleAddToFavorites}
           />
         ))}
       </div>

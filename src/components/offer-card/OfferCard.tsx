@@ -3,7 +3,7 @@ import { Typography, Box, IconButton } from '@mui/material'
 import BookmarkBorderIcon from '@mui/icons-material/BookmarkBorder'
 import Bookmark from '@mui/icons-material/Bookmark'
 
-import { Offer, UserRoleEnum } from '~/types'
+import { Offer } from '~/types'
 
 import AppCard from '~/components/app-card/AppCard'
 import UserProfileInfo from '~/components/user-profile-info/UserProfileInfo'
@@ -18,14 +18,14 @@ interface Props {
   offer: Offer
   onSendMessage: (offer: Offer) => void
   onShowDetails: (offer: Offer) => void
-  onAddToFavorites: (offer: Offer) => void
+  onToggleFavorite: (offer: Offer, isSaved: boolean) => void
 }
 
 const OfferCard: FC<Props> = ({
   offer,
   onSendMessage,
   onShowDetails,
-  onAddToFavorites
+  onToggleFavorite
 }) => {
   const { isTablet, isMobile } = useBreakpoints()
   const {
@@ -39,28 +39,30 @@ const OfferCard: FC<Props> = ({
   } = offer
 
   const fullName = `${author.firstName} ${author.lastName}`
-  const showNameAboveTitle = isTablet && !isMobile
+  const isCompact = isTablet || isMobile
+  const showNameAboveTitle = isCompact
 
   const [isSaved, setIsSaved] = useState(false)
 
   const handleToggleFavorite = () => {
-    setIsSaved((prev) => !prev)
-    onAddToFavorites(offer)
+    const nextIsSaved = !isSaved
+    setIsSaved(nextIsSaved)
+    onToggleFavorite(offer, nextIsSaved)
   }
 
   return (
     <AppCard>
       <Box sx={styles.root}>
-        {!isTablet ? (
+        {!isCompact ? (
           // Desktop → full profile
           <UserProfileInfo
             _id={author._id}
             firstName={author.firstName}
             lastName={author.lastName}
             photo={author.photo}
-            rating={Number(author.averageRating?.tutor)}
-            reviewsCount={Number(author.totalReviews?.tutor)}
-            role={UserRoleEnum.Tutor}
+            rating={Number(author.averageRating?.[offer.authorRole] ?? 0)}
+            reviewsCount={Number(author.totalReviews?.[offer.authorRole] ?? 0)}
+            role={offer.authorRole}
           />
         ) : (
           // Tablet → profile WITHOUT name (only photo + stats)
@@ -69,9 +71,9 @@ const OfferCard: FC<Props> = ({
             firstName=''
             lastName=''
             photo={author.photo}
-            rating={Number(author.averageRating?.tutor)}
-            reviewsCount={Number(author.totalReviews?.tutor)}
-            role={UserRoleEnum.Tutor}
+            rating={Number(author.averageRating?.[offer.authorRole] ?? 0)}
+            reviewsCount={Number(author.totalReviews?.[offer.authorRole] ?? 0)}
+            role={offer.authorRole}
           />
         )}
 
@@ -100,7 +102,13 @@ const OfferCard: FC<Props> = ({
               <Typography sx={styles.priceLabel}>/HOUR</Typography>
             </Box>
 
-            <IconButton onClick={handleToggleFavorite}>
+            <IconButton
+              aria-label={
+                isSaved ? 'Remove from favorites' : 'Add to favorites'
+              }
+              aria-pressed={isSaved}
+              onClick={handleToggleFavorite}
+            >
               {isSaved ? <Bookmark color='primary' /> : <BookmarkBorderIcon />}
             </IconButton>
           </Box>

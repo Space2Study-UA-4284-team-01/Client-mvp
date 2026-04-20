@@ -29,9 +29,9 @@ const DateFilter = ({ filter, setFilter, clearFilter }) => {
 
   const endAdornment = (
     <IconButton
+      className={filter.from || filter.to ? 'visible' : 'hidden'}
       data-testid='clear-icon'
       onClick={clearFilter}
-      style={filter.from || filter.to ? 'visible' : 'hidden'}
     >
       <ClearIcon color='primary' />
     </IconButton>
