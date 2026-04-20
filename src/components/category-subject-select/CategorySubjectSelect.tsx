@@ -1,72 +1,84 @@
-import { SyntheticEvent } from 'react'
-import Autocomplete from '@mui/material/Autocomplete'
-import MenuItem from '@mui/material/MenuItem'
-import TextField from '@mui/material/TextField'
+import { SyntheticEvent, useCallback } from 'react'
+import { useTranslation } from 'react-i18next'
+
+import AsyncAutocomplete from '~/components/async-autocomlete/AsyncAutocomplete'
+import { categoryService } from '~/services/category-service'
+import { subjectService } from '~/services/subject-service'
+import type { CategoryNameInterface, SubjectNameInterface } from '~/types'
 import { styles } from '~/components/category-subject-select/CategorySubjectSelect.styles'
 
-export interface CategoryOption {
-  value: string
-  label: string
-}
+export type CategoryOption = CategoryNameInterface
 
 interface CategorySubjectSelectProps {
-  categories: { _id: string; name: string }[]
-  subjects: string[]
   selectedCategory: CategoryOption | null
-  subject: string
+  subject: SubjectNameInterface | null
   onCategoryChange: (value: CategoryOption | null) => void
-  onSubjectChange: (value: string) => void
+  onSubjectChange: (value: SubjectNameInterface | null) => void
 }
 
+const unwrapData = <T,>(response: T[] | { data: T[] }): T[] =>
+  Array.isArray(response) ? response : response.data ?? []
+
 const CategorySubjectSelect = ({
-  categories,
-  subjects,
   selectedCategory,
   subject,
   onCategoryChange,
   onSubjectChange
 }: CategorySubjectSelectProps) => {
-  const categoryOptions: CategoryOption[] = Array.isArray(categories)
-    ? categories.map((c) => ({ value: c._id, label: c.name }))
-    : []
+  const { t } = useTranslation()
+
+  const getSubjectsNames = useCallback(
+    () => subjectService.getSubjectsNames(selectedCategory?._id ?? null),
+    [selectedCategory?._id]
+  )
+
+  const handleCategoryChange = (
+    _: SyntheticEvent,
+    value: CategoryNameInterface | null
+  ) => {
+    onCategoryChange(value)
+  }
+
+  const handleSubjectChange = (
+    _: SyntheticEvent,
+    value: SubjectNameInterface | null
+  ) => {
+    onSubjectChange(value)
+  }
 
   return (
     <>
-      <Autocomplete
+      <AsyncAutocomplete<CategoryNameInterface>
+        axiosProps={{ transform: unwrapData }}
         fullWidth
-        getOptionLabel={(option) => option.label}
-        isOptionEqualToValue={(option, value) => option.value === value.value}
-        onChange={(_: SyntheticEvent, value: CategoryOption | null) =>
-          onCategoryChange(value)
-        }
-        options={categoryOptions}
-        renderInput={(params) => (
-          <TextField
-            {...params}
-            label='Main Study Category'
-            sx={styles.select}
-          />
-        )}
+        labelField='name'
+        onChange={handleCategoryChange}
+        service={categoryService.getCategoriesNames}
         sx={styles.autocomplete}
-        value={selectedCategory}
-      />
-      <TextField
-        SelectProps={{
-          onChange: (e) => onSubjectChange(e.target.value as string)
+        textFieldProps={{
+          label: t('becomeTutor.categories.mainSubjectsLabel')
         }}
+        value={selectedCategory?._id ?? null}
+        valueField='_id'
+      />
+
+      <AsyncAutocomplete<SubjectNameInterface>
+        axiosProps={{ transform: unwrapData }}
         disabled={!selectedCategory}
+        fetchCondition={Boolean(selectedCategory)}
+        fetchOnFocus
         fullWidth
-        label='Subject'
-        select
-        sx={styles.select}
-        value={subject}
-      >
-        {subjects.map((s) => (
-          <MenuItem key={s} value={s}>
-            {s}
-          </MenuItem>
-        ))}
-      </TextField>
+        key={selectedCategory?._id ?? 'no-category'}
+        labelField='name'
+        onChange={handleSubjectChange}
+        service={getSubjectsNames}
+        sx={styles.autocomplete}
+        textFieldProps={{
+          label: t('becomeTutor.categories.subjectLabel')
+        }}
+        value={subject?._id ?? null}
+        valueField='_id'
+      />
     </>
   )
 }
