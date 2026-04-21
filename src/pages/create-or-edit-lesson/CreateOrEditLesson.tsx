@@ -27,7 +27,6 @@ import { snackbarVariants } from '~/constants'
 import {
   initialValues,
   defaultResponse,
-  myResourcesPath,
   validations
 } from '~/pages/create-or-edit-lesson/CreateOrEditLesson.constants'
 import {
@@ -245,16 +244,20 @@ const CreateOrEditLesson = () => {
         <FileEditor onEdit={handleEdit} value={data.content} />
         {attachmentsList}
         <Box sx={styles.buttons}>
-          <AppButton size={SizeEnum.ExtraLarge} type={ButtonTypeEnum.Submit}>
-            {t('common.save')}
-          </AppButton>
           <AppButton
             component={Link}
             size={SizeEnum.ExtraLarge}
-            to={myResourcesPath}
+            to={authRoutes.myResources.root.path}
             variant={ButtonVariantEnum.Tonal}
           >
             {t('common.cancel')}
+          </AppButton>
+          <AppButton
+            disabled={!data.title || !data.description}
+            size={SizeEnum.ExtraLarge}
+            type={ButtonTypeEnum.Submit}
+          >
+            {t('common.save')}
           </AppButton>
         </Box>
       </Box>

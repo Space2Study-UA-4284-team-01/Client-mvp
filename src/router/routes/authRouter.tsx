@@ -10,7 +10,8 @@ import {
   userProfile,
   newQuestion,
   editQuestion,
-  findOffers
+  findOffers,
+  newLesson
 } from '~/router/constants/crumbs'
 import PrivateRoute from '~/router/helpers/PrivateRoute'
 import { UserRoleEnum } from '~/types'
@@ -24,6 +25,9 @@ const MyResources = lazy(() => import('~/pages/my-resources/MyResources'))
 
 const CreateOrEditQuestion = lazy(
   () => import('~/pages/create-or-edit-question/CreateOrEditQuestion')
+)
+const CreateOrEditLesson = lazy(
+  () => import('~/pages/create-or-edit-lesson/CreateOrEditLesson')
 )
 
 export const authRouter = (
@@ -70,6 +74,11 @@ export const authRouter = (
       element={<CreateOrEditQuestion />}
       handle={{ crumb: [myResources, editQuestion] }}
       path={authRoutes.myResources.editQuestion.route}
+    />
+    <Route
+      element={<CreateOrEditLesson />}
+      handle={{ crumb: [myResources, newLesson] }}
+      path={authRoutes.myResources.newLesson.route}
     />
   </Route>
 )

@@ -19,6 +19,10 @@ export const authRoutes = {
     lessons: {
       route: 'my-resources/lessons',
       path: '/my-resources/lessons'
+    },
+    newLesson: {
+      route: 'my-resources/new-lesson',
+      path: '/my-resources/new-lesson'
     }
   },
   accountMenu: {

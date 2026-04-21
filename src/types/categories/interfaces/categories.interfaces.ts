@@ -3,6 +3,7 @@ import { Categories } from '~/types/my-resources/myResources.index'
 import { Question } from '~/types/questions/questions.index'
 import { Lesson } from '~/types/my-resources/myResources.index'
 import { RequestParams } from '~/types/services/types/services.types'
+import { Attachment } from '~/types/my-resources/myResources.index'
 
 export interface CategoriesParams extends RequestParams {
   name: string
@@ -21,7 +22,9 @@ export interface ScreenBasedLimits {
   default: number
 }
 
-export interface RemoveColumnRules<T extends Question | Lesson | Categories> {
+export interface RemoveColumnRules<
+  T extends Question | Lesson | Attachment | Categories
+> {
   desktop?: TableColumn<T>['label'][]
   tablet?: TableColumn<T>['label'][]
   mobile?: TableColumn<T>['label'][]

@@ -79,10 +79,10 @@ describe('LessonsContainer test', () => {
   })
 
   it('should display lesson menu', async () => {
-    const lessonMenuBtn = screen.getAllByTestId('menu-icon')[0]
+    const lessonMenuBtn = await screen.findAllByTestId('menu-icon')
 
     await waitFor(() => {
-      fireEvent.click(lessonMenuBtn)
+      fireEvent.click(lessonMenuBtn[0])
     })
 
     const lessonMenu = screen.getByRole('menu')
@@ -200,6 +200,37 @@ describe('LessonsContainer delete test', () => {
     await waitFor(() => {
       expect(
         screen.queryByText(responseLessonsMock.items[0].title)
+      ).toBeInTheDocument()
+    })
+  })
+})
+
+describe('LessonsContainer integration test', () => {
+  it('should show new lesson in table after creation', async () => {
+    const newLesson = {
+      ...lessonMock,
+      _id: 'newId',
+      title: 'New Test Lesson'
+    }
+
+    mockAxiosClient
+      .onGet(URLs.resources.lessons.get)
+      .replyOnce(200, responseLessonsMock)
+      .onPost(URLs.resources.lessons.post)
+      .replyOnce(200, newLesson)
+      .onGet(URLs.resources.lessons.get)
+      .replyOnce(200, {
+        count: 6,
+        items: [...responseLessonsMock.items, newLesson]
+      })
+
+    await waitFor(() => {
+      renderWithProviders(<LessonsContainer />)
+    })
+
+    await waitFor(() => {
+      expect(
+        screen.getByText(responseLessonsMock.items[0].title)
       ).toBeInTheDocument()
     })
   })

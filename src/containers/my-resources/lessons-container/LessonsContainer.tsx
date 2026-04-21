@@ -2,7 +2,8 @@ import { useCallback, useRef, useState } from 'react'
 import { useTranslation } from 'react-i18next'
 import Box from '@mui/material/Box'
 import AddIcon from '@mui/icons-material/Add'
-
+import { useNavigate } from 'react-router-dom'
+import { authRoutes } from '~/router/constants/authRoutes'
 import Loader from '~/components/loader/Loader'
 import AppButton from '~/components/app-button/AppButton'
 import AddResourceWithInput from '~/containers/my-resources/add-resource-with-input/AddResourceWithInput'
@@ -38,7 +39,7 @@ const LessonsContainer = () => {
   const breakpoints = useBreakpoints()
   const { page, handleChangePage } = usePagination()
   const { setAlert } = useSnackBarContext()
-
+  const navigate = useNavigate()
   const [selectedCategories, setSelectedCategories] = useState<string[]>([])
 
   const { sort } = sortOptions
@@ -102,7 +103,9 @@ const LessonsContainer = () => {
       <AddResourceWithInput
         btnText={t('myResourcesPage.lessons.addBtn')}
         button={
-          <AppButton onClick={() => void 0}>
+          <AppButton
+            onClick={() => navigate(authRoutes.myResources.newLesson.path)}
+          >
             {t('myResourcesPage.lessons.addBtn')}
             <AddIcon sx={styles.addIcon} />
           </AppButton>

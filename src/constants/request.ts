@@ -34,6 +34,9 @@ export const URLs = {
       patch: '/lessons',
       delete: '/lessons'
     },
+    attachments: {
+      get: '/attachments'
+    },
     questions: {
       get: '/questions',
       delete: '/questions',

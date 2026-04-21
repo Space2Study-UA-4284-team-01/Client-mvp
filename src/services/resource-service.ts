@@ -17,7 +17,9 @@ import {
   GetQuestion,
   UpdateResourceCategory,
   ApiMethodEnum,
-  Lesson
+  Lesson,
+  LessonData,
+  Attachment
 } from '~/types'
 import { createUrlPath } from '~/utils/helper-functions'
 
@@ -29,6 +31,19 @@ export const ResourceService = {
   },
   deleteLesson: async (id: string): Promise<AxiosResponse> =>
     await axiosClient.delete(createUrlPath(URLs.resources.lessons.delete, id)),
+  addLesson: async (data: LessonData): Promise<AxiosResponse<Lesson>> =>
+    await axiosClient.post(URLs.resources.lessons.post, data),
+  editLesson: async (data: LessonData, id?: string): Promise<AxiosResponse> =>
+    await axiosClient.patch(
+      createUrlPath(URLs.resources.lessons.patch, id),
+      data
+    ),
+  getLesson: async (id?: string): Promise<AxiosResponse<LessonData>> =>
+    await axiosClient.get(createUrlPath(URLs.resources.lessons.get, id)),
+  getAttachments: (
+    params?: GetResourcesParams
+  ): Promise<AxiosResponse<ItemsWithCount<Attachment>>> =>
+    axiosClient.get(URLs.resources.attachments.get, { params }),
   getQuestions: (
     params?: GetResourcesParams
   ): Promise<AxiosResponse<ItemsWithCount<Question>>> => {
