@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useCallback, useEffect } from 'react'
 import Container from '@mui/material/Container'
 
 import { useAppSelector } from '~/hooks/use-redux'
@@ -17,20 +17,22 @@ const StudentHome = () => {
   const { isFirstLogin, userRole } = useAppSelector((state) => state.appMain)
   const { checkConfirmation } = useConfirm()
 
+  const handleCloseRequest = useCallback<() => Promise<void>>(async () => {
+    const confirmed: boolean | Promise<boolean> = checkConfirmation({
+      title: 'titles.confirmTitle',
+      message: 'questions.unsavedChanges',
+      confirmButton: t('common.discard'),
+      cancelButton: t('common.cancel'),
+      check: true
+    })
+    if (await confirmed) closeModal()
+  }, [checkConfirmation, closeModal, t])
+
   useEffect(() => {
     if (isFirstLogin) {
       openModal({
         component: <UserStepsWrapper userRole={userRole} />,
-        onCloseRequest: async () => {
-          const confirmed = checkConfirmation({
-            title: 'titles.confirmTitle',
-            message: 'questions.unsavedChanges',
-            confirmButton: t('common.discard'),
-            cancelButton: t('common.cancel'),
-            check: true
-          })
-          if (await confirmed) closeModal()
-        },
+        onCloseRequest: handleCloseRequest,
         paperProps: {
           sx: {
             maxHeight: { sm: '652px' },
@@ -41,7 +43,7 @@ const StudentHome = () => {
         }
       })
     }
-  }, [openModal, isFirstLogin, userRole])
+  }, [openModal, isFirstLogin, userRole, handleCloseRequest])
 
   return (
     <Container data-testid='studentHome' sx={{ flex: 1 }}>
