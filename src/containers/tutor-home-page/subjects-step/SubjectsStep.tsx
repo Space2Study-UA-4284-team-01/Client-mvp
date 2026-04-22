@@ -26,10 +26,20 @@ const SubjectsStep = ({ btnsBox, stepLabel, userRole }: SubjectsStepProps) => {
   const namespace = userRole === tutor ? 'becomeTutor' : 'becomeStudent'
 
   const { stepData, handleStepData } = useStepContext() as {
-    stepData: Record<string, SubjectNameInterface[]>
+    stepData: Record<string, unknown>
     handleStepData: (label: string, value: SubjectNameInterface[]) => void
   }
-  const currentSubjects: SubjectNameInterface[] = stepData[stepLabel] ?? []
+
+  const rawSubjects = stepData[stepLabel]
+  const currentSubjects: SubjectNameInterface[] = Array.isArray(rawSubjects)
+    ? rawSubjects.filter(
+        (item): item is SubjectNameInterface =>
+          typeof item === 'object' &&
+          item !== null &&
+          '_id' in item &&
+          'name' in item
+      )
+    : []
 
   const [selectedCategory, setSelectedCategory] =
     useState<CategoryNameInterface | null>(null)

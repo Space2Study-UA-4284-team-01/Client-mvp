@@ -20,9 +20,6 @@ import { home } from '~/router/constants/crumbs'
 
 const HomeRoute = lazy(() => import('~/router/helpers/HomeRoute'))
 const Logout = lazy(() => import('~/pages/logout/Logout'))
-const SubjectInfoTest = lazy(
-  () => import('~/pages/subject-step-test/SubjectStepTest')
-)
 
 export const routerConfig = (
   <Route
@@ -32,7 +29,6 @@ export const routerConfig = (
   >
     <Route element={<AppContent />} handle={{ crumb: home }}>
       <Route element={<HomeRoute />} index />
-      <Route element={<SubjectInfoTest />} path={'subject-step-test'} />
       {guestRouter}
       {authRouter}
       {tutorRouter}
