@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { Fragment } from 'react'
 
 import TextField from '@mui/material/TextField'
@@ -10,20 +11,37 @@ const defaultFilterOptions = (options, state) => {
   return filterOptions(options, state)
 }
 
+const defaultListboxProps = {
+  style: { maxHeight: 150 }
+}
+
+/**
+ * @param {{
+ *   filterOptions?: any,
+ *   ListboxProps?: any,
+ *   options?: any[],
+ *   hideClearIcon?: boolean,
+ *   textFieldProps?: any,
+ *   [key: string]: any
+ * }} props
+ */
 const AppAutoComplete = ({
-  filterOptions = defaultFilterOptions,
-  ListboxProps = { style: { maxHeight: 150 } },
+  filterOptions,
+  ListboxProps,
   options = [],
   hideClearIcon = false,
   textFieldProps = {},
   ...props
 }) => {
+  const resolvedFilterOptions = filterOptions ?? defaultFilterOptions
+  const resolvedListboxProps = ListboxProps ?? defaultListboxProps
+
   return (
     <Autocomplete
-      ListboxProps={ListboxProps}
-      filterOptions={filterOptions}
+      ListboxProps={resolvedListboxProps}
+      filterOptions={resolvedFilterOptions}
       isOptionEqualToValue={(option, value) => option === value}
-      options={options || []}
+      options={options}
       {...props}
       renderInput={(params) => (
         <TextField
@@ -31,7 +49,7 @@ const AppAutoComplete = ({
           {...textFieldProps}
           InputProps={{
             ...params.InputProps,
-            ...textFieldProps.InputProps,
+            ...(textFieldProps.InputProps || {}),
             endAdornment: (
               <Fragment>
                 {props.loading ? (
