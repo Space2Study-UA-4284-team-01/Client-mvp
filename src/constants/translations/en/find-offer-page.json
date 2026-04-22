@@ -49,5 +49,9 @@
   },
   "otherOffers":{
     "title":"Other offers"
+  },
+  "popularCategories": {
+    "title": "Popular Categories",
+    "viewAll": "View all categories"
   }
 }

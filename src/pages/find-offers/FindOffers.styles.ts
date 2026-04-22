@@ -1,6 +1,3 @@
-import { BorderAll, BorderColorRounded } from '@mui/icons-material'
-import { c } from 'vitest/dist/reporters-5f784f42'
-
 export const styles = {
   heroBox: {
     backgroundColor: '#CFE5E7',
