@@ -1,12 +1,7 @@
 import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import SortMenu from '~/components/sort-menu/SortMenu'
-
-type MockAppSelectProps = {
-  value: string
-  setValue: (value: string) => void
-  fields: { value: string; title: string }[]
-}
+import { SortEnum } from '~/types'
 
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
@@ -37,19 +32,43 @@ vi.mock('~/components/app-select/AppSelect', () => ({
 
 describe('SortMenu', () => {
   it('should render without crashing', () => {
-    render(<SortMenu sort='newest' setSort={vi.fn()} />)
+    render(
+      <SortMenu
+        sort={{
+          order: SortEnum.Asc,
+          orderBy: 'createdAt'
+        }}
+        setSort={vi.fn()}
+      />
+    )
 
     expect(screen.getByTestId('app-select')).toBeInTheDocument()
   })
 
   it('should render with correct translation key', () => {
-    render(<SortMenu sort='newest' setSort={vi.fn()} />)
+    render(
+      <SortMenu
+        sort={{
+          order: SortEnum.Asc,
+          orderBy: 'createdAt'
+        }}
+        setSort={vi.fn()}
+      />
+    )
 
     expect(capturedProps.selectTitle).toBe('filters.sortBy.sortByTitle')
   })
 
   it('should render AppSelect with correct props', () => {
-    render(<SortMenu sort='rating' setSort={vi.fn()} />)
+    render(
+      <SortMenu
+        sort={{
+          order: SortEnum.Desc,
+          orderBy: 'rating'
+        }}
+        setSort={vi.fn()}
+      />
+    )
 
     const select = screen.getByTestId('app-select')
 
@@ -59,17 +78,36 @@ describe('SortMenu', () => {
   it('should call setSort when a new value is selected', () => {
     const setSort = vi.fn()
 
-    render(<SortMenu sort='newest' setSort={setSort} />)
+    render(
+      <SortMenu
+        sort={{
+          order: SortEnum.Asc,
+          orderBy: 'createdAt'
+        }}
+        setSort={setSort}
+      />
+    )
 
     fireEvent.change(screen.getByTestId('app-select'), {
       target: { value: 'priceDesc' }
     })
 
-    expect(setSort).toHaveBeenCalledWith('priceDesc')
+    expect(setSort).toHaveBeenCalledWith({
+      order: SortEnum.Desc,
+      orderBy: 'price'
+    })
   })
 
   it('should contain expected sort values', () => {
-    render(<SortMenu sort='newest' setSort={vi.fn()} />)
+    render(
+      <SortMenu
+        sort={{
+          order: SortEnum.Asc,
+          orderBy: 'createdAt'
+        }}
+        setSort={vi.fn()}
+      />
+    )
 
     const options = document.querySelectorAll('option')
 

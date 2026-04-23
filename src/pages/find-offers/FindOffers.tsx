@@ -15,18 +15,32 @@ import { categoryService } from '~/services/category-service'
 import { authRoutes } from '~/router/constants/authRoutes'
 import { defaultResponses } from '~/constants'
 import { getOpositeRole } from '~/utils/helper-functions'
-import { ButtonVariantEnum, CategoryInterface, ItemsWithCount } from '~/types'
+import {
+  ButtonVariantEnum,
+  CategoryInterface,
+  ItemsWithCount,
+  Sort,
+  SortEnum
+} from '~/types'
 import { styles } from '~/pages/find-offers/FindOffers.styles'
 import SortMenu from '~/components/sort-menu/SortMenu'
 
 const FindOffers = () => {
   const { t } = useTranslation()
-  const [sort, setSort] = useState<string>('newest')
+  const [sort, setSort] = useState<Sort>({
+    order: SortEnum.Desc,
+    orderBy: 'createdAt'
+  })
   const { userRole } = useAppSelector((state) => state.appMain)
   const oppositeRole = getOpositeRole(userRole)
 
   const { response } = useAxios<ItemsWithCount<CategoryInterface>>({
-    service: () => categoryService.getCategories({ limit: 9, skip: 0 }),
+    service: () =>
+      categoryService.getCategories({
+        limit: 9,
+        skip: 0,
+        sort
+      }),
     defaultResponse: defaultResponses.itemsWithCount
   })
 
