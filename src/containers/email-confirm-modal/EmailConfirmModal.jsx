@@ -15,13 +15,13 @@ import LoginDialog from '~/containers/guest-home-page/login-dialog/LoginDialog'
 import Loader from '~/components/loader/Loader'
 
 const EmailConfirmModal = ({ confirmToken, email }) => {
-  const isRequestTriggered = useRef(false)
-
   const { t } = useTranslation('translations')
   const { closeModal, openModal } = useModalContext()
 
   const isPending = confirmToken === 'verification-pending'
-  const [loading, setLoading] = useState(!isPending)
+  const isRequestTriggered = useRef(false)
+
+  const [loading, setLoading] = useState(true)
   const [error, setError] = useState(null)
 
   useEffect(() => {
