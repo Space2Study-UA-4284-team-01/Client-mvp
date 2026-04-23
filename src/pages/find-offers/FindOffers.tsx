@@ -17,6 +17,7 @@ import { defaultResponses } from '~/constants'
 import { getOpositeRole } from '~/utils/helper-functions'
 import { ButtonVariantEnum, CategoryInterface, ItemsWithCount } from '~/types'
 import { styles } from '~/pages/find-offers/FindOffers.styles'
+import SortMenu from '~/components/sort-menu/SortMenu'
 
 const FindOffers = () => {
   const { t } = useTranslation()
@@ -45,6 +46,7 @@ const FindOffers = () => {
 
   return (
     <PageWrapper>
+      <SortMenu />
       <Box sx={styles.popularCategoriesSection}>
         <Typography sx={styles.title}>
           {t('findOffers.popularCategories.title')}
