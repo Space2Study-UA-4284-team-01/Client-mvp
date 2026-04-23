@@ -1,4 +1,4 @@
-import { useMemo } from 'react'
+import { useMemo, useState } from 'react'
 import { Link } from 'react-router-dom'
 import { useTranslation } from 'react-i18next'
 import Box from '@mui/material/Box'
@@ -21,6 +21,7 @@ import SortMenu from '~/components/sort-menu/SortMenu'
 
 const FindOffers = () => {
   const { t } = useTranslation()
+  const [sort, setSort] = useState<string>('newest')
   const { userRole } = useAppSelector((state) => state.appMain)
   const oppositeRole = getOpositeRole(userRole)
 
@@ -46,7 +47,7 @@ const FindOffers = () => {
 
   return (
     <PageWrapper>
-      <SortMenu />
+      <SortMenu setSort={setSort} sort={sort} />
       <Box sx={styles.popularCategoriesSection}>
         <Typography sx={styles.title}>
           {t('findOffers.popularCategories.title')}
