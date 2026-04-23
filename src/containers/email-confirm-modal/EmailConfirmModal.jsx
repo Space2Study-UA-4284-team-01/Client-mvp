@@ -88,17 +88,16 @@ const EmailConfirmModal = ({ confirmToken, email }) => {
     email: {
       fontWeight: 700
     },
-    // ОНОВЛЕНІ СТИЛІ ДЛЯ ФІНАЛЬНОЇ КНОПКИ (Go to login / OK)
     actionButton: {
-      backgroundColor: '#263238', // Темний колір з макета
+      backgroundColor: '#263238',
       color: 'white',
-      padding: '12px 64px', // Вертикальний і горизонтальний відступи
+      padding: '12px 64px',
       borderRadius: '4px',
-      fontSize: '18px', // Більший шрифт
+      fontSize: '18px',
       fontWeight: 700,
-      textTransform: 'none', // Прибираємо CAPS LOCK
-      mt: '40px', // Відступ від заголовка
-      minWidth: '220px', // Щоб вона була компактною, але не занадто маленькою
+      textTransform: 'none',
+      mt: '40px',
+      minWidth: '220px',
       '&:hover': {
         backgroundColor: '#1a2327'
       }
@@ -123,7 +122,6 @@ const EmailConfirmModal = ({ confirmToken, email }) => {
       </Box>
     )
 
-  // Стан після реєстрації: ТІЛЬКИ ХРЕСТИК, БЕЗ КНОПКИ
   if (isPending) {
     return (
       <Box sx={styles.container}>
@@ -131,7 +129,7 @@ const EmailConfirmModal = ({ confirmToken, email }) => {
           <CloseIcon />
         </IconButton>
 
-        <Box component='img' src={imgInfo} sx={styles.img} />
+        <Box alt='info' component='img' src={imgInfo} sx={styles.img} />
 
         <Typography sx={styles.title}>
           {t(
@@ -157,7 +155,6 @@ const EmailConfirmModal = ({ confirmToken, email }) => {
   const isAlreadyConfirmed = error?.code === 'EMAIL_ALREADY_CONFIRMED'
   const isError = error !== null && !isAlreadyConfirmed
 
-  // Стан після кліку по лінку: ТУТ КНОПКА ПОТРІБНА (Go to login / OK)
   return (
     <Box sx={styles.container}>
       <IconButton onClick={handleClose} sx={styles.closeButton}>
@@ -165,6 +162,7 @@ const EmailConfirmModal = ({ confirmToken, email }) => {
       </IconButton>
 
       <Box
+        alt={isError ? 'reject' : 'success'}
         component='img'
         src={isError ? imgReject : imgSuccess}
         sx={styles.img}
@@ -178,12 +176,10 @@ const EmailConfirmModal = ({ confirmToken, email }) => {
             : t('modals.emailConfirm')}
       </Typography>
 
-      {/* ТУТ МИ СТАВИМО ФІНАЛЬНУ КНОПКУ ЯК НА МАКЕТІ */}
       <Button
         onClick={isError ? handleClose : handleGoToLogin}
         sx={styles.actionButton}
         variant='contained'
-        // fullWidth={false} // Можна додати, якщо Material-UI автоматично її розтягує
       >
         {isError ? t('common.confirmButton') : t('button.goToLogin')}
       </Button>
