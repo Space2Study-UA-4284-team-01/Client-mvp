@@ -13,7 +13,7 @@ const SortMenu = ({ setSort, sort }: ContentViewControlsProps) => {
   const { t } = useTranslation()
 
   return (
-    <Box>
+    <Box sx={{ width: 'fit-content', display: 'inline-flex' }}>
       <AppSelect
         fields={sortFields}
         selectTitle={t('filters.sortBy.sortByTitle')}
