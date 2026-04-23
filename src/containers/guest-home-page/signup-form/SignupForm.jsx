@@ -15,7 +15,7 @@ import VisibilityOff from '@mui/icons-material/VisibilityOff'
 
 import AppTextField from '~/components/app-text-field/AppTextField'
 import useForm from '~/hooks/use-form'
-import { authService } from '~/services/auth-service'
+import { useSignUpMutation } from '~/services/auth-service'
 import { useModalContext } from '~/context/modal-context'
 import { useSnackBarContext } from '~/context/snackbar-context'
 import { snackbarVariants } from '~/constants'
@@ -35,6 +35,8 @@ const SignupForm = ({ role }) => {
   const [showPassword, setShowPassword] = useState(false)
   const [showConfirmPassword, setShowConfirmPassword] = useState(false)
 
+  const [signupUser] = useSignUpMutation()
+
   const { data, errors, handleBlur, handleInputChange, handleSubmit } = useForm(
     {
       initialValues: {
@@ -47,26 +49,22 @@ const SignupForm = ({ role }) => {
       },
       onSubmit: async () => {
         try {
-          // Показуємо плашку про початок (використовуємо ключ з signup або загальний)
           setAlert({
             severity: snackbarVariants.info,
-            message: t('signup.confirmEmailMessage') // Або додайте "sendingEmail" у JSON
+            message: t('signup.confirmEmailMessage')
           })
-
-          await authService.signup({
+          await signupUser({
             firstName: data.firstName,
             lastName: data.lastName,
             email: data.email,
             password: data.password,
             role
-          })
+          }).unwrap()
 
-          // Показуємо повідомлення про успіх, використовуючи існуючий ключ із вашого файлу
           setAlert({
             severity: snackbarVariants.success,
             message: t('signup.confirmEmailTitle')
           })
-
           openModal({
             component: (
               <EmailConfirmModal
@@ -77,7 +75,7 @@ const SignupForm = ({ role }) => {
             closeOnBackdropClick: false
           })
         } catch (e) {
-          const errorCode = e.response?.data?.code || 'signupFailed'
+          const errorCode = e?.data?.code || 'signupFailed'
           setAlert({
             severity: snackbarVariants.error,
             message: t(`errors.${errorCode}`)
