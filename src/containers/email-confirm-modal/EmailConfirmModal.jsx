@@ -1,4 +1,5 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
+
 import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types'
 import { Box, Typography, IconButton, Button } from '@mui/material'
@@ -13,9 +14,9 @@ import imgInfo from '~/assets/img/email-confirmation-modals/i.svg'
 import LoginDialog from '~/containers/guest-home-page/login-dialog/LoginDialog'
 import Loader from '~/components/loader/Loader'
 
-let isRequestTriggered = false
-
 const EmailConfirmModal = ({ confirmToken, email }) => {
+  const isRequestTriggered = useRef(false)
+
   const { t } = useTranslation('translations')
   const { closeModal, openModal } = useModalContext()
 
@@ -24,10 +25,10 @@ const EmailConfirmModal = ({ confirmToken, email }) => {
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (isPending || isRequestTriggered) return
+    if (isPending || isRequestTriggered.current) return
 
     const verifyEmailOnServer = async () => {
-      isRequestTriggered = true
+      isRequestTriggered.current = true
       setLoading(true)
       try {
         await AuthService.confirmEmail(confirmToken)
@@ -43,7 +44,7 @@ const EmailConfirmModal = ({ confirmToken, email }) => {
     verifyEmailOnServer()
 
     return () => {
-      isRequestTriggered = false
+      isRequestTriggered.current = false
     }
   }, [confirmToken, isPending])
 
@@ -110,7 +111,7 @@ const EmailConfirmModal = ({ confirmToken, email }) => {
   }
 
   const handleClose = () => {
-    isRequestTriggered = false
+    isRequestTriggered.current = false
     window.history.replaceState({}, document.title, '/')
     closeModal()
   }
