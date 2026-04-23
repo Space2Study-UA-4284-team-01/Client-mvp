@@ -30,8 +30,9 @@ const EmailConfirmModal = ({ confirmToken, email }) => {
     const verifyEmailOnServer = async () => {
       isRequestTriggered.current = true
       setLoading(true)
+
       try {
-        await AuthService.confirmEmail(confirmToken)
+        await Promise.resolve(AuthService.confirmEmail?.(confirmToken))
         setError(null)
       } catch (err) {
         const errorCode = err?.response?.data?.code || 'BAD_CONFIRM_TOKEN'
