@@ -1,5 +1,4 @@
-import { useState, useEffect, useRef } from 'react'
-
+import { useState, useEffect } from 'react'
 import { useTranslation } from 'react-i18next'
 import PropTypes from 'prop-types'
 import { Box, Typography, IconButton, Button } from '@mui/material'
@@ -14,25 +13,24 @@ import imgInfo from '~/assets/img/email-confirmation-modals/i.svg'
 import LoginDialog from '~/containers/guest-home-page/login-dialog/LoginDialog'
 import Loader from '~/components/loader/Loader'
 
+let isRequestTriggered = false
+
 const EmailConfirmModal = ({ confirmToken, email }) => {
   const { t } = useTranslation('translations')
   const { closeModal, openModal } = useModalContext()
 
   const isPending = confirmToken === 'verification-pending'
-  const isRequestTriggered = useRef(false)
-
-  const [loading, setLoading] = useState(true)
+  const [loading, setLoading] = useState(!isPending)
   const [error, setError] = useState(null)
 
   useEffect(() => {
-    if (isPending || isRequestTriggered.current) return
+    if (isPending || isRequestTriggered) return
 
     const verifyEmailOnServer = async () => {
-      isRequestTriggered.current = true
+      isRequestTriggered = true
       setLoading(true)
-
       try {
-        await Promise.resolve(AuthService.confirmEmail?.(confirmToken))
+        await AuthService.confirmEmail(confirmToken)
         setError(null)
       } catch (err) {
         const errorCode = err?.response?.data?.code || 'BAD_CONFIRM_TOKEN'
@@ -43,10 +41,6 @@ const EmailConfirmModal = ({ confirmToken, email }) => {
     }
 
     verifyEmailOnServer()
-
-    return () => {
-      isRequestTriggered.current = false
-    }
   }, [confirmToken, isPending])
 
   const styles = {
@@ -112,7 +106,7 @@ const EmailConfirmModal = ({ confirmToken, email }) => {
   }
 
   const handleClose = () => {
-    isRequestTriggered.current = false
+    isRequestTriggered = false
     window.history.replaceState({}, document.title, '/')
     closeModal()
   }
@@ -137,7 +131,7 @@ const EmailConfirmModal = ({ confirmToken, email }) => {
           <CloseIcon />
         </IconButton>
 
-        <Box alt='info' component='img' src={imgInfo} sx={styles.img} />
+        <Box component='img' src={imgInfo} sx={styles.img} />
 
         <Typography sx={styles.title}>
           {t(
