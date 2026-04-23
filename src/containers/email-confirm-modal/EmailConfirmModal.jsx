@@ -41,6 +41,10 @@ const EmailConfirmModal = ({ confirmToken, email }) => {
     }
 
     verifyEmailOnServer()
+
+    return () => {
+      isRequestTriggered = false
+    }
   }, [confirmToken, isPending])
 
   const styles = {
