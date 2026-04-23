@@ -56,8 +56,7 @@ const Faq = () => {
               boxShadow: 'none',
               border: 'none',
               borderRadius: '0px',
-              mb: -3,
-              '&:not(:last-child)': { mb: 2 },
+              mb: index === faqData.length - 1 ? 0 : 2,
               '&:before': { display: 'none' },
               '& .MuiAccordionSummary-root': {
                 minHeight: 64,
@@ -78,4 +77,5 @@ const Faq = () => {
     </Box>
   )
 }
+
 export default Faq
