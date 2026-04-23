@@ -2,14 +2,23 @@ import { fireEvent, render, screen } from '@testing-library/react'
 import { describe, expect, it, vi } from 'vitest'
 import SortMenu from '~/components/sort-menu/SortMenu'
 
+type MockAppSelectProps = {
+  value: string
+  setValue: (value: string) => void
+  fields: { value: string; title: string }[]
+}
+
 vi.mock('react-i18next', () => ({
   useTranslation: () => ({
     t: (key: string) => key
   })
 }))
 
+let capturedProps: any
+
 vi.mock('~/components/app-select/AppSelect', () => ({
   default: (props: any) => {
+    capturedProps = props
     return (
       <select
         data-testid='app-select'
@@ -31,6 +40,12 @@ describe('SortMenu', () => {
     render(<SortMenu sort='newest' setSort={vi.fn()} />)
 
     expect(screen.getByTestId('app-select')).toBeInTheDocument()
+  })
+
+  it('should render with correct translation key', () => {
+    render(<SortMenu sort='newest' setSort={vi.fn()} />)
+
+    expect(capturedProps.selectTitle).toBe('filters.sortBy.sortByTitle')
   })
 
   it('should render AppSelect with correct props', () => {
