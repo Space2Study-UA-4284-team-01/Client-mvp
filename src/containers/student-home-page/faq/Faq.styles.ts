@@ -7,7 +7,8 @@ export const styles = {
   titleWithDescription: {
     wrapper: {
       textAlign: 'center',
-      mb: '32px'
+      mb: '32px',
+      mt: '15px'
     },
     title: {
       typography: { xs: 'h4' }
