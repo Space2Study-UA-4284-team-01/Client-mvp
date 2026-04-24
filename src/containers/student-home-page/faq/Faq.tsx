@@ -6,36 +6,35 @@ import {
   Box
 } from '@mui/material'
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore'
+import { useTranslation } from 'react-i18next'
 
 import TitleWithDescription from '~/components/title-with-description/TitleWithDescription'
 import { studentRoutes } from '~/router/constants/studentRoutes'
 
 import { styles } from '~/containers/student-home-page/faq/Faq.styles'
 
-const faqData = [
+const faqKeys = [
   {
-    question: 'How to find a tutor',
-    answer:
-      'It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout.'
+    question: 'studentHomePage.faq.findTutor',
+    answer: 'studentHomePage.faq.findTutorDescription'
   },
   {
-    question: 'How to book a lesson',
-    answer:
-      'Choose a tutor, pick a convenient time, and confirm your booking in a few clicks.'
+    question: 'studentHomePage.faq.bookLesson',
+    answer: 'studentHomePage.faq.bookLessonDescription'
   },
   {
-    question: 'Rules for students',
-    answer:
-      'Students should follow platform rules, respect tutors, and attend lessons on time.'
+    question: 'studentHomePage.faq.rules',
+    answer: 'studentHomePage.faq.rulesDescription'
   },
   {
-    question: 'How you can pay for lessons',
-    answer:
-      'Payments are available via card and other supported methods on the platform.'
+    question: 'studentHomePage.faq.howPayLessons',
+    answer: 'studentHomePage.faq.howPayLessonsDescription'
   }
 ]
 
 const Faq = () => {
+  const { t } = useTranslation()
+
   return (
     <Box
       className='section'
@@ -43,20 +42,20 @@ const Faq = () => {
       sx={styles.container}
     >
       <TitleWithDescription
-        description='Everything you need to know about learning journey in Space2Study as a student.'
+        description={t('studentHomePage.faq.subtitle')}
         style={styles.titleWithDescription}
-        title='Frequently Asked Questions'
+        title={t('studentHomePage.faq.title')}
       />
 
       <Box sx={{ mt: 3 }}>
-        {faqData.map((item, index) => (
+        {faqKeys.map((item, index) => (
           <Accordion
             key={index}
             sx={{
               boxShadow: 'none',
               border: 'none',
               borderRadius: '0px',
-              mb: index === faqData.length - 1 ? 0 : 2,
+              mb: index === faqKeys.length - 1 ? 0 : 2,
               '&:before': { display: 'none' },
               '& .MuiAccordionSummary-root': {
                 minHeight: 64,
@@ -65,11 +64,11 @@ const Faq = () => {
             }}
           >
             <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-              <Typography fontWeight={500}>{item.question}</Typography>
+              <Typography fontWeight={500}>{t(item.question)}</Typography>
             </AccordionSummary>
 
             <AccordionDetails>
-              <Typography>{item.answer}</Typography>
+              <Typography>{t(item.answer)}</Typography>
             </AccordionDetails>
           </Accordion>
         ))}
