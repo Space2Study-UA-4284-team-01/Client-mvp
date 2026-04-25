@@ -19,12 +19,17 @@ import { getOfferCardData } from '~/utils/offer/getOfferCard'
 
 interface Props {
   offer: Offer
-  onSendMessage: (offer: Offer) => void
+  onSendMessage: (offer: Offer, message: string) => void
   onShowDetails: (offer: Offer) => void
   onToggleFavorite: (offer: Offer, isSaved: boolean) => void
 }
 
-const OfferCard: FC<Props> = ({ offer, onShowDetails, onToggleFavorite }) => {
+const OfferCard: FC<Props> = ({
+  offer,
+  onShowDetails,
+  onToggleFavorite,
+  onSendMessage
+}) => {
   const { isTablet, isMobile } = useBreakpoints()
   const { title, price, description, languages, author } = offer
 
@@ -118,6 +123,10 @@ const OfferCard: FC<Props> = ({ offer, onShowDetails, onToggleFavorite }) => {
             <MessageForm
               offer={offer}
               onClose={() => setIsMessageOpen(false)}
+              onSubmit={(message) => {
+                onSendMessage(offer, message)
+                setIsMessageOpen(false)
+              }}
             />
           }
           paperProps={{ sx: { borderRadius: '12px', p: 2 } }}

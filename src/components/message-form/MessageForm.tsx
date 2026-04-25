@@ -6,9 +6,10 @@ import { Offer } from '~/types'
 interface Props {
   offer: Offer
   onClose: () => void
+  onSubmit: (message: string) => void
 }
 
-const MessageForm: FC<Props> = ({ offer, onClose }) => {
+const MessageForm: FC<Props> = ({ offer, onClose, onSubmit }) => {
   const [message, setMessage] = useState('')
 
   const handleSend = () => {
@@ -17,6 +18,7 @@ const MessageForm: FC<Props> = ({ offer, onClose }) => {
       text: message
     })
 
+    onSubmit(message)
     onClose()
   }
 
