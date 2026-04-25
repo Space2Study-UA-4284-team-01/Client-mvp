@@ -18,3 +18,25 @@ export interface UpdateResourceCategory {
 export interface GetResourcesCategoriesParams extends Partial<RequestParams> {
   name?: string
 }
+
+export interface Attachment extends CommonEntityFields {
+  fileName: string
+  size: number
+  url: string
+}
+
+export interface Lesson extends CommonEntityFields {
+  title: string
+  description: string
+  content: string
+  attachments: Attachment[]
+  category: Categories | null
+}
+
+export interface LessonData {
+  title: string
+  description: string
+  content: string
+  attachments: Attachment[]
+  category: string | null
+}

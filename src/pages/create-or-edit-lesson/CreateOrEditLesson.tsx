@@ -27,7 +27,6 @@ import { snackbarVariants } from '~/constants'
 import {
   initialValues,
   defaultResponse,
-  myResourcesPath,
   validations
 } from '~/pages/create-or-edit-lesson/CreateOrEditLesson.constants'
 import {
@@ -124,7 +123,7 @@ const CreateOrEditLesson = () => {
   })
 
   const editLesson = (): Promise<AxiosResponse> => {
-    return ResourceService.editLesson(data, id)
+    return ResourceService.editLesson(data, id!)
   }
 
   const { fetchData: fetchEditedLesson } = useAxios<null, LessonData>({
@@ -156,7 +155,7 @@ const CreateOrEditLesson = () => {
   })
 
   const getLesson = (id?: string): Promise<AxiosResponse> => {
-    return ResourceService.getLesson(id)
+    return ResourceService.getLesson(id!)
   }
 
   const handleResponseLesson = (lesson: LessonData) => {
@@ -245,16 +244,20 @@ const CreateOrEditLesson = () => {
         <FileEditor onEdit={handleEdit} value={data.content} />
         {attachmentsList}
         <Box sx={styles.buttons}>
-          <AppButton size={SizeEnum.ExtraLarge} type={ButtonTypeEnum.Submit}>
-            {t('common.save')}
-          </AppButton>
           <AppButton
             component={Link}
             size={SizeEnum.ExtraLarge}
-            to={myResourcesPath}
+            to={authRoutes.myResources.root.path}
             variant={ButtonVariantEnum.Tonal}
           >
             {t('common.cancel')}
+          </AppButton>
+          <AppButton
+            disabled={!data.title?.trim() || !data.description?.trim()}
+            size={SizeEnum.ExtraLarge}
+            type={ButtonTypeEnum.Submit}
+          >
+            {t('common.save')}
           </AppButton>
         </Box>
       </Box>

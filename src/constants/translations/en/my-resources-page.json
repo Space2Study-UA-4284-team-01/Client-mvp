@@ -33,5 +33,19 @@
     "categoryDropdown": "Category...",
     "selectCategory": "Select category"
   },
+  "lessons": {
+    "addBtn": "New lesson",
+    "title": "Lesson title",
+    "lastUpdates": "Last updates",
+    "emptyItems": "You have no lessons yet",
+    "confirmDeletionTitle": "Do you confirm lesson deletion?",
+    "successDeletion": "Lesson was deleted successfully"
+  },
+  "attachments": {
+    "add": "Add attachments",
+    "title": "File name",
+    "updated": "Last updates",
+    "emptyItems": "You have no attachments yet"
+  },
   "confirmDeletionMessage": "This action is permanent and will remove all related content. Please review your decision before proceeding."
 }

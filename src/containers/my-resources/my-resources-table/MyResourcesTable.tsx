@@ -20,8 +20,10 @@ import {
 } from '~/types'
 // import { roundedBorderTable } from '~/containers/my-cooperations/cooperations-container/CooperationContainer.styles'
 
-interface MyResourcesTableInterface<T>
-  extends Omit<EnhancedTableProps<T, undefined>, 'data'> {
+interface MyResourcesTableInterface<T> extends Omit<
+  EnhancedTableProps<T, undefined>,
+  'data'
+> {
   resource: ResourcesTabsEnum
   itemsPerPage: number
   data: ResourcesTableData<T>
@@ -29,7 +31,7 @@ interface MyResourcesTableInterface<T>
     onEdit: (id: string) => void
     onDuplicate?: (id: string) => void
   }
-  services: { deleteService: (id?: string) => Promise<AxiosResponse> }
+  services: { deleteService: (id: string) => Promise<AxiosResponse> }
   pagination: PaginationProps
 }
 
@@ -108,7 +110,7 @@ const MyResourcesTable = <T extends TableItem>({
   return (
     <>
       <EnhancedTable<T>
-        data={{ items: response.items }}
+        data={{ items: response?.items ?? [] }}
         emptyTableKey={`myResourcesPage.${resource}.emptyItems`}
         rowActions={rowActions}
         // sx={roundedBorderTable}
@@ -117,7 +119,7 @@ const MyResourcesTable = <T extends TableItem>({
       <AppPagination
         onChange={onChange}
         page={page}
-        pageCount={Math.ceil(response.count / itemsPerPage)}
+        pageCount={Math.ceil((response?.count ?? 0) / itemsPerPage)}
       />
     </>
   )
