@@ -20,13 +20,15 @@ const CardWithLink: FC<CardWithLinkProps> = ({
   link
 }) => {
   return (
-    <AppCard link={link}>
-      <Box alt='item image' component='img' src={img} sx={styles.img} />
-      <TitleWithDescription
-        description={description}
-        style={styles.titleWithDescription}
-        title={title}
-      />
+    <AppCard link={link} sx={styles.card}>
+      <Box sx={styles.content}>
+        <Box alt='item image' component='img' src={img} sx={styles.img} />
+        <TitleWithDescription
+          description={description}
+          style={styles.titleWithDescription}
+          title={title}
+        />
+      </Box>
     </AppCard>
   )
 }

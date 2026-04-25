@@ -4,7 +4,6 @@ import {
   Dispatch,
   SetStateAction,
   SyntheticEvent,
-  ChangeEvent,
   KeyboardEvent
 } from 'react'
 import { useTranslation } from 'react-i18next'
@@ -35,7 +34,7 @@ interface SearchAutocompleteProps
   extends Omit<AutocompleteProps<string, false, true, true>, 'renderInput'> {
   search: string
   setSearch: Dispatch<SetStateAction<string>>
-  onSearchChange?: () => void
+  onSearchChange?: (value: string) => void
   textFieldProps: TextFieldProps
   renderInput?: (params: AutocompleteRenderInputParams) => ReactNode
 }
@@ -56,38 +55,45 @@ const SearchAutocomplete = ({
     options: string[],
     state: FilterOptionsState<string>
   ) => {
-    const defaultFilterOptions = createFilterOptions<string>()
-    return defaultFilterOptions(options, state).slice(0, 6)
+    const defaultOptions = createFilterOptions<string>()
+    return defaultOptions(options, state).slice(0, 6)
   }
 
-  const onInputChange = (_: ChangeEvent<HTMLInputElement>, value: string) => {
+  const onInputChange = (_: SyntheticEvent, value: string) => {
     setSearchInput(value)
   }
 
   const handleAutoCompleteChange = (_: SyntheticEvent, value: string) => {
-    onSearchChange && onSearchChange()
+    onSearchChange?.(value)
     setSearch(value)
   }
 
   const onSearch = () => {
-    onSearchChange && searchInput !== search && onSearchChange()
+    if (searchInput !== search) {
+      onSearchChange?.(searchInput)
+    }
     setSearch(searchInput)
   }
 
   const onClear = () => {
-    onSearchChange && search && onSearchChange()
+    if (search) {
+      onSearchChange?.('')
+    }
     setSearchInput('')
     setSearch('')
   }
 
   const onEnterPress = (event: KeyboardEvent<HTMLInputElement>) => {
-    event.key === 'Enter' && onSearch()
+    if (event.key === 'Enter') {
+      onSearch()
+    }
   }
 
   const labelStyle = {
     ...styles.inputLabel,
-    visibility: searchInput && VisibilityEnum.Hidden
+    visibility: searchInput ? VisibilityEnum.Hidden : VisibilityEnum.Visible
   }
+
   const clearIconVisibility = {
     visibility: searchInput ? VisibilityEnum.Visible : VisibilityEnum.Hidden
   }
@@ -97,14 +103,13 @@ const SearchAutocomplete = ({
       {!isMobile && <SearchIcon sx={styles.searchIcon} />}
 
       <AppAutoComplete
-        ListboxProps={{ style: styles.listBox }}
         filterOptions={filterOptions}
         freeSolo
         hideClearIcon
         inputValue={searchInput}
         onChange={handleAutoCompleteChange}
         onInputChange={onInputChange}
-        sx={{ flex: 1 }}
+        sx={styles.autocomplete}
         textFieldProps={{
           InputLabelProps: { style: labelStyle, shrink: false },
           InputProps: { disableUnderline: true },

@@ -47,5 +47,9 @@
   },
   "otherOffers":{
     "title":"Інші пропозиції"
+  },
+  "popularCategories": {
+    "title": "Популярні категорії",
+    "viewAll": "Переглянути всі категорії"
   }
 }
