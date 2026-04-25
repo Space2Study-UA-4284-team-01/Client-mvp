@@ -4,6 +4,7 @@ import Box from '@mui/material/Box'
 import AddIcon from '@mui/icons-material/Add'
 
 import Loader from '~/components/loader/Loader'
+import NoResultsBlock from '~/components/no-results-block/NoResultsBlock'
 import AppButton from '~/components/app-button/AppButton'
 import AddCategoriesModal from '~/containers/my-resources/add-categories-modal/AddCategoriesModal'
 import AddResourceWithInput from '~/containers/my-resources/add-resource-with-input/AddResourceWithInput'
@@ -175,6 +176,8 @@ const CategoriesContainer = () => {
       />
       {loading ? (
         <Loader pageLoad size={50} />
+      ) : response.items.length === 0 ? (
+        <NoResultsBlock />
       ) : (
         <MyResourcesTable<Categories> {...props} />
       )}
