@@ -7,7 +7,6 @@ export const styles = {
 
   // LEFT
   left: {
-    width: '220px',
     display: 'flex',
     flexDirection: 'column',
     gap: '10px'
@@ -48,7 +47,6 @@ export const styles = {
 
   // RIGHT
   right: {
-    width: '200px',
     display: 'flex',
     flexDirection: 'column',
     justifyContent: 'space-between',

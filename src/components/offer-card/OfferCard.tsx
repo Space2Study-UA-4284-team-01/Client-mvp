@@ -10,9 +10,12 @@ import UserProfileInfo from '~/components/user-profile-info/UserProfileInfo'
 import AppChipList from '~/components/app-chips-list/AppChipList'
 import AppButton from '~/components/app-button/AppButton'
 import LanguagesListWithIcon from '~/components/languages-list-with-icon/LanguagesListWithIcon'
+import PopupDialog from '~/components/popup-dialog/PopupDialog'
+import MessageForm from '~/components/message-form/MessageForm'
 
-import { styles } from './OfferCard.styles'
+import { styles } from '~/components/offer-card/OfferCard.styles'
 import useBreakpoints from '~/hooks/use-breakpoints'
+import { getOfferCardData } from '~/utils/offer/getOfferCard'
 
 interface Props {
   offer: Offer
@@ -21,28 +24,15 @@ interface Props {
   onToggleFavorite: (offer: Offer, isSaved: boolean) => void
 }
 
-const OfferCard: FC<Props> = ({
-  offer,
-  onSendMessage,
-  onShowDetails,
-  onToggleFavorite
-}) => {
+const OfferCard: FC<Props> = ({ offer, onShowDetails, onToggleFavorite }) => {
   const { isTablet, isMobile } = useBreakpoints()
-  const {
-    title,
-    price,
-    description,
-    proficiencyLevel,
-    languages,
-    author,
-    subject
-  } = offer
+  const { title, price, description, languages, author } = offer
 
-  const fullName = `${author.firstName} ${author.lastName}`
   const isCompact = isTablet || isMobile
   const showNameAboveTitle = isCompact
 
   const [isSaved, setIsSaved] = useState(false)
+  const [isMessageOpen, setIsMessageOpen] = useState(false)
 
   const handleToggleFavorite = () => {
     const nextIsSaved = !isSaved
@@ -50,32 +40,23 @@ const OfferCard: FC<Props> = ({
     onToggleFavorite(offer, nextIsSaved)
   }
 
+  const { fullName, chips } = getOfferCardData(offer)
+
   return (
     <AppCard>
       <Box sx={styles.root}>
-        {!isCompact ? (
-          // Desktop → full profile
+        {/* LEFT */}
+        <Box sx={styles.left}>
           <UserProfileInfo
             _id={author._id}
-            firstName={author.firstName}
-            lastName={author.lastName}
+            firstName={isCompact ? '' : author.firstName}
+            lastName={isCompact ? '' : author.lastName}
             photo={author.photo}
-            rating={Number(author.averageRating?.[offer.authorRole] ?? 0)}
-            reviewsCount={Number(author.totalReviews?.[offer.authorRole] ?? 0)}
+            rating={Number(author.averageRating?.tutor ?? 0)}
+            reviewsCount={Number(author.totalReviews?.tutor ?? 0)}
             role={offer.authorRole}
           />
-        ) : (
-          // Tablet → profile WITHOUT name (only photo + stats)
-          <UserProfileInfo
-            _id={author._id}
-            firstName=''
-            lastName=''
-            photo={author.photo}
-            rating={Number(author.averageRating?.[offer.authorRole] ?? 0)}
-            reviewsCount={Number(author.totalReviews?.[offer.authorRole] ?? 0)}
-            role={offer.authorRole}
-          />
-        )}
+        </Box>
 
         {/* CENTER */}
         <Box sx={styles.center}>
@@ -85,8 +66,7 @@ const OfferCard: FC<Props> = ({
           )}
           <Typography sx={styles.title}>{title}</Typography>
           <Box sx={styles.meta}>
-            <AppChipList defaultQuantity={1} items={[subject.name]} />
-            <AppChipList defaultQuantity={2} items={proficiencyLevel} />
+            <AppChipList defaultQuantity={2} items={chips} />
           </Box>
           <Typography sx={styles.description}>{description}</Typography>
 
@@ -120,7 +100,7 @@ const OfferCard: FC<Props> = ({
             </AppButton>
 
             <AppButton
-              onClick={() => onSendMessage(offer)}
+              onClick={() => setIsMessageOpen(true)}
               sx={styles.secondaryButton}
               variant='outlined'
             >
@@ -129,6 +109,21 @@ const OfferCard: FC<Props> = ({
           </Box>
         </Box>
       </Box>
+      {/* POPUP */}
+      {isMessageOpen && (
+        <PopupDialog
+          closeModal={() => setIsMessageOpen(false)}
+          closeModalAfterDelay={() => {}}
+          content={
+            <MessageForm
+              offer={offer}
+              onClose={() => setIsMessageOpen(false)}
+            />
+          }
+          paperProps={{ sx: { borderRadius: '12px', p: 2 } }}
+          timerId={null}
+        />
+      )}
     </AppCard>
   )
 }

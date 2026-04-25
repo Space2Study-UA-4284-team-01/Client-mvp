@@ -12,6 +12,8 @@ interface AppChipProps {
   icon?: ReactElement<SvgIconProps>
   sx?: SxProps
   labelSx?: SxProps
+  bgColor?: string
+  textColor?: string
 }
 
 const AppChip: React.FC<AppChipProps> = ({
@@ -19,7 +21,9 @@ const AppChip: React.FC<AppChipProps> = ({
   children,
   icon,
   sx,
-  labelSx
+  labelSx,
+  bgColor,
+  textColor
 }) => {
   return (
     <Chip
@@ -37,12 +41,22 @@ const AppChip: React.FC<AppChipProps> = ({
       }
       icon={icon}
       label={
-        <Typography sx={{ typography: 'subtitle2', ...labelSx }}>
+        <Typography
+          sx={{
+            color: textColor || '#1F2A37',
+            typography: 'subtitle2',
+            ...labelSx
+          }}
+        >
           {children}
         </Typography>
       }
       onDelete={handleDelete}
-      sx={{ ...styles.chip, ...sx }}
+      sx={{
+        ...styles.chip,
+        backgroundColor: bgColor,
+        ...sx
+      }}
     />
   )
 }

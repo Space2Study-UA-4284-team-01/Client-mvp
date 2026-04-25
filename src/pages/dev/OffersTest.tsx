@@ -10,8 +10,7 @@ import {
   UserRoleEnum
 } from '~/types'
 
-// 🔥 Single mock offer
-const mockOffer: Offer = {
+const baseMockOffer: Offer = {
   _id: '1',
   title: 'Math lessons for beginners',
   price: 300,
@@ -24,8 +23,8 @@ const mockOffer: Offer = {
   subject: { _id: '1', name: 'Math' },
   category: {
     _id: '1',
-    name: 'Science',
-    appearance: { icon: '#', color: 'blue' },
+    name: 'Mathematics',
+    appearance: { icon: '#', color: '#79B260' },
     totalOffers: { student: 2, tutor: 5 },
     createdAt: '',
     updatedAt: ''
@@ -46,26 +45,78 @@ const mockOffer: Offer = {
   }
 }
 
-// 🔥 Multiple offers
+// 🔥 Single mock offer
 const mockOffers: Offer[] = [
-  mockOffer,
   {
-    ...mockOffer,
+    ...baseMockOffer,
+    _id: '1',
+    title: 'German for beginners: speaking & grammar',
+    price: 400,
+    subject: { _id: '1', name: 'German' },
+    proficiencyLevel: [ProficiencyLevelEnum.Beginner],
+    category: {
+      ...baseMockOffer.category,
+      appearance: { icon: '#', color: '#79B260' }
+    }
+  },
+  {
+    ...baseMockOffer,
     _id: '2',
-    title: 'Physics lessons for high school students',
-    price: 400
+    title: 'Marine Biology basics with real-world examples',
+    price: 300,
+    subject: { _id: '2', name: 'Marine Biology' },
+    category: {
+      ...baseMockOffer.category,
+      appearance: { icon: '#', color: '#5A8088' }
+    }
   },
   {
-    ...mockOffer,
+    ...baseMockOffer,
     _id: '3',
-    title: 'English conversation practice',
-    price: 250
+    title: 'Linear Algebra explained step-by-step',
+    price: 250,
+    subject: { _id: '3', name: 'Linear Math' },
+    proficiencyLevel: [
+      ProficiencyLevelEnum.Beginner,
+      ProficiencyLevelEnum.Advanced
+    ],
+    category: {
+      ...baseMockOffer.category,
+      appearance: { icon: '#', color: '#F1BC19' }
+    }
   },
   {
-    ...mockOffer,
+    ...baseMockOffer,
     _id: '4',
-    title: 'Chemistry basics for beginners',
-    price: 350
+    title: 'UI/UX Design from scratch (Figma + UX thinking)',
+    price: 500,
+    subject: { _id: '4', name: 'UI/UX Design' },
+    category: {
+      ...baseMockOffer.category,
+      appearance: { icon: '#', color: '#00A7A7' }
+    }
+  },
+  {
+    ...baseMockOffer,
+    _id: '5',
+    title: 'Guitar lessons: chords, rhythm & songs',
+    price: 350,
+    subject: { _id: '5', name: 'Guitar' },
+    category: {
+      ...baseMockOffer.category,
+      appearance: { icon: '#', color: '#B35969' }
+    }
+  },
+  {
+    ...baseMockOffer,
+    _id: '6',
+    title: 'Ancient World History: from Egypt to Rome',
+    price: 150,
+    subject: { _id: '6', name: 'Ancient World History' },
+    category: {
+      ...baseMockOffer.category,
+      appearance: { icon: '#', color: '#EE3E54' }
+    }
   }
 ]
 
