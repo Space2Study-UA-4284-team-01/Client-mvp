@@ -1,6 +1,7 @@
 import Typography from '@mui/material/Typography'
 import ListAltIcon from '@mui/icons-material/ListAlt'
-
+import { authRoutes } from '~/router/constants/authRoutes'
+import { Box } from '@mui/material'
 import AppChip from '~/components/app-chip/AppChip'
 import IconExtensionWithTitle from '~/components/icon-extension-with-title/IconExtensionWithTitle'
 import { styles } from '~/containers/add-resources/AddResources.styles'
@@ -17,8 +18,18 @@ export const columns: TableColumn<Lesson>[] = [
   {
     label: 'myResourcesPage.lessons.title',
     field: 'title',
-    calculatedCellValue: (lesson: Lesson) => (
-      <IconExtensionWithTitle icon={<ListAltIcon />} title={lesson.title} />
+    calculatedCellValue: (
+      lesson: Lesson,
+      { navigate }: AdditionalPropsInterface
+    ) => (
+      <Box
+        onClick={() =>
+          navigate(`${authRoutes.myResources.lessonDetails.path}/${lesson._id}`)
+        }
+        sx={{ cursor: 'pointer' }}
+      >
+        <IconExtensionWithTitle icon={<ListAltIcon />} title={lesson.title} />
+      </Box>
     )
   },
   {
