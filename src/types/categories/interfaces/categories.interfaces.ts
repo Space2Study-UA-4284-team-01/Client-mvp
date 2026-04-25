@@ -1,9 +1,11 @@
 import { TableColumn } from '~/types/components/components.index'
-import { Categories } from '~/types/my-resources/myResources.index'
+import {
+  Categories,
+  Lesson,
+  Attachment
+} from '~/types/my-resources/myResources.index'
 import { Question } from '~/types/questions/questions.index'
-import { Lesson } from '~/types/my-resources/myResources.index'
 import { RequestParams } from '~/types/services/types/services.types'
-import { Attachment } from '~/types/my-resources/myResources.index'
 
 export interface CategoriesParams extends RequestParams {
   name: string

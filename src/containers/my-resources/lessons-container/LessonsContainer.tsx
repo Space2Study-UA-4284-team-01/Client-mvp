@@ -32,6 +32,29 @@ import {
 import { ajustColumns, getScreenBasedLimit } from '~/utils/helper-functions'
 import { styles } from '~/containers/my-resources/lessons-container/LessonsContainer.styles'
 
+/*const mockLessons: Lesson[] = [
+  {
+    _id: '1',
+    title: 'Test Lesson 1',
+    description: 'Description',
+    content: '',
+    attachments: [],
+    category: null,
+    createdAt: '2023-10-02T17:39:52.373Z',
+    updatedAt: '2023-10-03T17:39:52.373Z'
+  },
+  {
+    _id: '2',
+    title: 'Test Lesson 2',
+    description: 'Description',
+    content: '',
+    attachments: [],
+    category: { _id: '123', name: 'Math', author: '123', createdAt: '', updatedAt: '' },
+    createdAt: '2023-10-02T17:39:52.373Z',
+    updatedAt: '2023-10-03T17:39:52.373Z'
+  }
+]*/
+
 const LessonsContainer = () => {
   const { t } = useTranslation()
   const searchTitle = useRef<string>('')
@@ -61,13 +84,14 @@ const LessonsContainer = () => {
         limit: itemsPerPage,
         skip: (page - 1) * itemsPerPage,
         sort,
-        title: searchTitle.current
+        title: searchTitle.current,
+        categories: selectedCategories
       }),
-    [page, itemsPerPage, sort]
+    [page, itemsPerPage, sort, selectedCategories]
   )
 
   const deleteLesson = useCallback(
-    (id?: string) => ResourceService.deleteLesson(id ?? ''),
+    (id: string) => ResourceService.deleteLesson(id),
     []
   )
 
@@ -76,7 +100,8 @@ const LessonsContainer = () => {
     GetResourcesParams
   >({
     service: getLessons,
-    defaultResponse: { count: 1, items: [] },
+    defaultResponse: { count: 0, items: [] },
+    //defaultResponse: { count: mockLessons.length, items: mockLessons },
     onResponseError
   })
 
@@ -94,7 +119,10 @@ const LessonsContainer = () => {
     sort: sortOptions,
     itemsPerPage,
     resource: ResourcesTabsEnum.Lessons,
-    actions: { onEdit: () => void 0 },
+    actions: {
+      onEdit: (id: string) =>
+        navigate(`${authRoutes.myResources.editLesson.path}/${id}`)
+    },
     sx: styles.table
   }
 

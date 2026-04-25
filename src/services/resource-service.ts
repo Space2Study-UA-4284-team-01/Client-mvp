@@ -33,13 +33,15 @@ export const ResourceService = {
     await axiosClient.delete(createUrlPath(URLs.resources.lessons.delete, id)),
   addLesson: async (data: LessonData): Promise<AxiosResponse<Lesson>> =>
     await axiosClient.post(URLs.resources.lessons.post, data),
-  editLesson: async (data: LessonData, id?: string): Promise<AxiosResponse> =>
+  editLesson: async (data: LessonData, id: string): Promise<AxiosResponse> =>
     await axiosClient.patch(
       createUrlPath(URLs.resources.lessons.patch, id),
       data
     ),
-  getLesson: async (id?: string): Promise<AxiosResponse<LessonData>> =>
-    await axiosClient.get(createUrlPath(URLs.resources.lessons.get, id)),
+  getLesson: async (id: string): Promise<AxiosResponse<Lesson>> =>
+    await axiosClient.get<Lesson>(
+      createUrlPath(URLs.resources.lessons.get, id)
+    ),
   getAttachments: (
     params?: GetResourcesParams
   ): Promise<AxiosResponse<ItemsWithCount<Attachment>>> =>

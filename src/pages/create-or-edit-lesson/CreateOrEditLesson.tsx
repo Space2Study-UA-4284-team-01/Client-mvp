@@ -123,7 +123,7 @@ const CreateOrEditLesson = () => {
   })
 
   const editLesson = (): Promise<AxiosResponse> => {
-    return ResourceService.editLesson(data, id)
+    return ResourceService.editLesson(data, id!)
   }
 
   const { fetchData: fetchEditedLesson } = useAxios<null, LessonData>({
@@ -155,7 +155,7 @@ const CreateOrEditLesson = () => {
   })
 
   const getLesson = (id?: string): Promise<AxiosResponse> => {
-    return ResourceService.getLesson(id)
+    return ResourceService.getLesson(id!)
   }
 
   const handleResponseLesson = (lesson: LessonData) => {
@@ -253,7 +253,7 @@ const CreateOrEditLesson = () => {
             {t('common.cancel')}
           </AppButton>
           <AppButton
-            disabled={!data.title || !data.description}
+            disabled={!data.title?.trim() || !data.description?.trim()}
             size={SizeEnum.ExtraLarge}
             type={ButtonTypeEnum.Submit}
           >

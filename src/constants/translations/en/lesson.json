@@ -1,13 +1,13 @@
 {
-    "labels": {
-      "title": "Title",
-      "description": "Description",
-      "attachments": "Add attachments"
-    },
-    "errorMessages": {
-      "title": "Title is required",
-      "description": "Description is required"
-    },
-    "successAddedLesson": "Lesson was successfully added",
-    "successEditedLesson": "Lesson was successfully edited"
-  }
+  "labels": {
+    "title": "Title",
+    "description": "Description",
+    "attachments": "Add attachments"
+  },
+  "errorMessages": {
+    "title": "Title is required",
+    "description": "Description is required"
+  },
+  "successAddedLesson": "Lesson was successfully added",
+  "successEditedLesson": "Lesson was successfully edited"
+}

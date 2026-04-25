@@ -2,9 +2,9 @@ import AttachFileIcon from '@mui/icons-material/AttachFile'
 
 import IconExtensionWithTitle from '~/components/icon-extension-with-title/IconExtensionWithTitle'
 import { getFormattedDate } from '~/utils/helper-functions'
-import { Attachment, RemoveColumnRules } from '~/types'
+import { Attachment, RemoveColumnRules, TableColumn } from '~/types'
 
-export const columns = [
+export const columns: TableColumn<Attachment>[] = [
   {
     label: 'myResourcesPage.attachments.title',
     field: 'fileName',

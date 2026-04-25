@@ -9,10 +9,11 @@ import {
   AdditionalPropsInterface,
   Lesson,
   RemoveColumnRules,
-  SortEnum
+  SortEnum,
+  TableColumn
 } from '~/types'
 
-export const columns = [
+export const columns: TableColumn<Lesson>[] = [
   {
     label: 'myResourcesPage.lessons.title',
     field: 'title',

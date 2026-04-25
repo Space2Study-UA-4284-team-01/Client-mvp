@@ -1,12 +1,14 @@
 import { screen, waitFor } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 
-import { renderWithProviders } from '~tests/test-utils'
+import { mockAxiosClient, renderWithProviders } from '~tests/test-utils'
 import CreateOrEditLesson from '~/pages/create-or-edit-lesson/CreateOrEditLesson'
+import { URLs } from '~/constants/request'
+import { authRoutes } from '~/router/constants/authRoutes'
 
 describe('CreateOrEditLesson component test', () => {
-  beforeEach(async () => {
-    await waitFor(() => renderWithProviders(<CreateOrEditLesson />))
+  beforeEach(() => {
+    renderWithProviders(<CreateOrEditLesson />)
   })
 
   it('should display lesson form with title and description fields', () => {
@@ -42,13 +44,18 @@ describe('CreateOrEditLesson component test', () => {
     const saveBtn = screen.getByText('common.save')
     expect(saveBtn).not.toBeDisabled()
   })
-  it('should navigate to my-resources on Cancel click', async () => {
+  it('should navigate to my-resources on Cancel click', () => {
     const cancelBtn = screen.getByText('common.cancel')
 
-    expect(cancelBtn.closest('a')).toHaveAttribute('href', '/my-resources')
+    expect(cancelBtn.closest('a')).toHaveAttribute(
+      'href',
+      authRoutes.myResources.root.path
+    )
   })
 
   it('should submit form with title and description', async () => {
+    mockAxiosClient.onPost(URLs.resources.lessons.post).replyOnce(200, {})
+
     const user = userEvent.setup()
     const titleField = screen.getByLabelText('lesson.labels.title')
     const descriptionField = screen.getByLabelText('lesson.labels.description')
@@ -60,7 +67,43 @@ describe('CreateOrEditLesson component test', () => {
     await user.click(saveBtn)
 
     await waitFor(() => {
-      expect(saveBtn).toBeInTheDocument()
+      expect(mockAxiosClient.history.post.length).toBe(1)
     })
+
+    const successToast = await screen.findByText('lesson.successAddedLesson')
+    expect(successToast).toBeInTheDocument()
+  })
+})
+
+describe('CreateOrEditLesson edit mode test', () => {
+  const lessonId = '123'
+  const existingLesson = {
+    _id: lessonId,
+    title: 'Existing Lesson',
+    description: 'Existing Description',
+    content: '',
+    attachments: [],
+    category: null,
+    createdAt: '2023-10-02T17:39:52.373Z',
+    updatedAt: '2023-10-03T17:39:52.373Z'
+  }
+
+  beforeEach(() => {
+    mockAxiosClient
+      .onGet(`${URLs.resources.lessons.get}/${lessonId}`)
+      .reply(200, existingLesson)
+
+    renderWithProviders(<CreateOrEditLesson />, {
+      initialEntries: `/my-resources/edit-lesson/${lessonId}`
+    })
+  })
+
+  afterEach(() => {
+    mockAxiosClient.reset()
+  })
+
+  it('should render form in edit mode', () => {
+    const titleField = screen.getByLabelText('lesson.labels.title')
+    expect(titleField).toBeInTheDocument()
   })
 })

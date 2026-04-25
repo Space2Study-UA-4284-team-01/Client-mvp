@@ -45,14 +45,12 @@ const responseLessonsMockWithCategory = {
 }
 
 describe('LessonsContainer test', () => {
-  beforeEach(async () => {
-    await waitFor(() => {
-      mockAxiosClient
-        .onGet(URLs.resources.lessons.get)
-        .reply(200, responseLessonsMock)
+  beforeEach(() => {
+    mockAxiosClient
+      .onGet(URLs.resources.lessons.get)
+      .reply(200, responseLessonsMock)
 
-      renderWithProviders(<LessonsContainer />)
-    })
+    renderWithProviders(<LessonsContainer />)
   })
 
   afterEach(() => {
@@ -92,14 +90,12 @@ describe('LessonsContainer test', () => {
 })
 
 describe('LessonCategory test', () => {
-  beforeEach(async () => {
-    await waitFor(() => {
-      mockAxiosClient
-        .onGet(URLs.resources.lessons.get)
-        .reply(200, responseLessonsMockWithCategory)
+  beforeEach(() => {
+    mockAxiosClient
+      .onGet(URLs.resources.lessons.get)
+      .reply(200, responseLessonsMockWithCategory)
 
-      renderWithProviders(<LessonsContainer />)
-    })
+    renderWithProviders(<LessonsContainer />)
   })
 
   afterEach(() => {
@@ -115,16 +111,14 @@ describe('LessonCategory test', () => {
 })
 
 describe('LessonsContainer delete test', () => {
-  beforeEach(async () => {
-    await waitFor(() => {
-      mockAxiosClient
-        .onGet(URLs.resources.lessons.get)
-        .reply(200, responseLessonsMock)
+  beforeEach(() => {
+    mockAxiosClient
+      .onGet(URLs.resources.lessons.get)
+      .reply(200, responseLessonsMock)
 
-      mockAxiosClient.onDelete(URLs.resources.lessons.delete).reply(200)
+    mockAxiosClient.onDelete(URLs.resources.lessons.delete).reply(200)
 
-      renderWithProviders(<LessonsContainer />)
-    })
+    renderWithProviders(<LessonsContainer />)
   })
 
   afterEach(() => {
@@ -181,27 +175,46 @@ describe('LessonsContainer delete test', () => {
 
     const menuBtn = screen.getAllByTestId('menu-icon')[0]
 
-    await waitFor(() => {
-      fireEvent.click(menuBtn)
-    })
+    await waitFor(() => fireEvent.click(menuBtn))
 
     const deleteBtn = screen.getByText('common.delete')
-
-    await waitFor(() => {
-      fireEvent.click(deleteBtn)
-    })
+    await waitFor(() => fireEvent.click(deleteBtn))
 
     const confirmBtn = screen.getByText('common.yes')
+    await waitFor(() => fireEvent.click(confirmBtn))
 
     await waitFor(() => {
-      fireEvent.click(confirmBtn)
+      expect(mockAxiosClient.history.delete.length).toBe(1)
     })
+  })
+})
+
+describe('LessonsContainer edit test', () => {
+  beforeEach(async () => {
+    await waitFor(() => {
+      mockAxiosClient
+        .onGet(URLs.resources.lessons.get)
+        .reply(200, responseLessonsMock)
+
+      renderWithProviders(<LessonsContainer />)
+    })
+  })
+
+  afterEach(() => {
+    vi.clearAllMocks()
+    mockAxiosClient.reset()
+  })
+
+  it('should navigate to edit lesson on Edit click', async () => {
+    const menuBtn = await screen.findAllByTestId('menu-icon')
 
     await waitFor(() => {
-      expect(
-        screen.queryByText(responseLessonsMock.items[0].title)
-      ).toBeInTheDocument()
+      fireEvent.click(menuBtn[0])
     })
+
+    const editBtn = screen.getByText('common.edit')
+
+    expect(editBtn).toBeInTheDocument()
   })
 })
 
@@ -224,14 +237,11 @@ describe('LessonsContainer integration test', () => {
         items: [...responseLessonsMock.items, newLesson]
       })
 
-    await waitFor(() => {
-      renderWithProviders(<LessonsContainer />)
-    })
+    renderWithProviders(<LessonsContainer />)
 
-    await waitFor(() => {
-      expect(
-        screen.getByText(responseLessonsMock.items[0].title)
-      ).toBeInTheDocument()
-    })
+    const firstLesson = await screen.findByText(
+      responseLessonsMock.items[0].title
+    )
+    expect(firstLesson).toBeInTheDocument()
   })
 })
