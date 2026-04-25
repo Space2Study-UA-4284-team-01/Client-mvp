@@ -16,7 +16,7 @@ type ChipItem = {
 interface AppChipListProps {
   items: ChipItem[]
   defaultQuantity: number
-  handleChipDelete?: (item: string) => void
+  handleChipDelete?: (item: ChipItem) => void
   icon?: React.ReactElement<SvgIconProps>
   wrapperStyle?: SxProps
 }
@@ -32,16 +32,12 @@ const AppChipList: React.FC<AppChipListProps> = ({
     items.length - defaultQuantity > 0 && items.length - defaultQuantity
 
   const chips = items.map((item: ChipItem) => {
-    const handleDelete = handleChipDelete
-      ? {
-          handleDelete: () => handleChipDelete(item.label)
-        }
-      : undefined
-
     return (
       <AppChip
-        {...handleDelete}
         bgColor={item.bgColor}
+        handleDelete={
+          handleChipDelete ? () => handleChipDelete(item) : undefined
+        }
         icon={icon}
         key={item.label}
         textColor={item.textColor}
