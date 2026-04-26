@@ -14,7 +14,10 @@ const StudentHome = () => {
   const { isFirstLogin, userRole } = useAppSelector((state) => state.appMain)
 
   useEffect(() => {
-    if (isFirstLogin) {
+    const shouldShow =
+      isFirstLogin || localStorage.getItem('showOnboarding') === 'true'
+    if (shouldShow) {
+      localStorage.removeItem('showOnboarding')
       openModal({
         component: <UserStepsWrapper userRole={userRole} />,
         paperProps: {

@@ -25,6 +25,7 @@ const LoginDialog = () => {
       onSubmit: async () => {
         try {
           await loginUser(data).unwrap()
+          localStorage.setItem('showOnboarding', 'true')
           closeModal()
         } catch (e) {
           setAlert({
