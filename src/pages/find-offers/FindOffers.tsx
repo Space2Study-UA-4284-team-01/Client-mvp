@@ -171,10 +171,14 @@ const FindOffers = () => {
           </Button>
         </AppToolbar>
 
-
-        <Box sx={{ display: 'inline-flex' }}>
-          <SortMenu setSort={setSort} sort={sort} />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between'
+          }}
+        >
           <RoleSwitcher authorRole={authorRole} onChange={setAuthorRole} />
+          <SortMenu setSort={setSort} sort={sort} />
         </Box>
 
         <Typography sx={styles.title}>
