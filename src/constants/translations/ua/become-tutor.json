@@ -1,7 +1,7 @@
 {
   "stepLabels": {
-    "generalInfo": "Загальне", 
-    "language": "Мова", 
+    "generalInfo": "Загальне",
+    "language": "Мова",
     "subjects": "Предмети",
     "photo": "Фото"
   },
@@ -20,10 +20,10 @@
     "autocompleteLabel": "Твоя рідна мова"
   },
   "categories": {
-    "title": "Velit officia consequat duis enim velit mollit. Other categories you can add in your account settings later.",
+    "title": "Будь ласка, виберіть основні предмети на основі категорії. Ви можете додати інші пізніше.",
     "mainSubjectsLabel": "Основна категорія предмету",
     "subjectLabel": "Предмет",
-    "btnText": "Додайте ще один предмет",
+    "btnText": "Додати ще один предмет",
     "emptyFields": "Усі поля мають бути заповнені",
     "sameSubject": "Ви вже маєте такий предмет"
   },
