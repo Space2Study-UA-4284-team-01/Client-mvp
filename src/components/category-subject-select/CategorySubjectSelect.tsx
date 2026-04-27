@@ -1,9 +1,10 @@
 import { SyntheticEvent, useCallback } from 'react'
 import { useTranslation } from 'react-i18next'
-
 import AsyncAutocomplete from '~/components/async-autocomlete/AsyncAutocomplete'
 import { categoryService } from '~/services/category-service'
 import { subjectService } from '~/services/subject-service'
+import { useAppSelector } from '~/hooks/use-redux'
+import { UserRoleEnum } from '~/types'
 import type { CategoryNameInterface, SubjectNameInterface } from '~/types'
 import { styles } from '~/components/category-subject-select/CategorySubjectSelect.styles'
 
@@ -26,6 +27,10 @@ const CategorySubjectSelect = ({
   onSubjectChange
 }: CategorySubjectSelectProps) => {
   const { t } = useTranslation()
+  const { userRole } = useAppSelector((state) => state.appMain)
+
+  const translationKey =
+    userRole === UserRoleEnum.Student ? 'becomeStudent' : 'becomeTutor'
 
   const getSubjectsNames = useCallback(
     () => subjectService.getSubjectsNames(selectedCategory?._id ?? null),
@@ -56,12 +61,11 @@ const CategorySubjectSelect = ({
         service={categoryService.getCategoriesNames}
         sx={styles.autocomplete}
         textFieldProps={{
-          label: t('becomeTutor.categories.mainSubjectsLabel')
+          label: t(`${translationKey}.categories.mainSubjectsLabel`)
         }}
         value={selectedCategory?._id ?? null}
         valueField='_id'
       />
-
       <AsyncAutocomplete<SubjectNameInterface>
         axiosProps={{ transform: unwrapData }}
         disabled={!selectedCategory}
@@ -74,7 +78,7 @@ const CategorySubjectSelect = ({
         service={getSubjectsNames}
         sx={styles.autocomplete}
         textFieldProps={{
-          label: t('becomeTutor.categories.subjectLabel')
+          label: t(`${translationKey}.categories.subjectLabel`)
         }}
         value={subject?._id ?? null}
         valueField='_id'
