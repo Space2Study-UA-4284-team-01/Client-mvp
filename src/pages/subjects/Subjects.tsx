@@ -22,7 +22,6 @@ import CardWithLink from '~/components/card-with-link/CardWithLink'
 import DirectionLink from '~/components/direction-link/DirectionLink'
 import CreateSubjectModal from '~/containers/find-offer/create-new-subject/CreateNewSubject'
 import AppToolbar from '~/components/app-toolbar/AppToolbar'
-import OfferRequestBlock from '~/containers/find-offer/offer-request-block/OfferRequestBlock'
 import AsyncAutocomplete from '~/components/async-autocomlete/AsyncAutocomplete'
 import useBreakpoints from '~/hooks/use-breakpoints'
 import serviceIcon from '~/assets/img/student-home-page/service_icon.png'
@@ -236,8 +235,6 @@ const Subjects = () => {
   return (
     <PageWrapper>
       <Box sx={styles.page}>
-        <OfferRequestBlock />
-
         <Box sx={styles.contentWrapper}>
           <TitleWithDescription
             description={t('subjectsPage.subjects.description', {
