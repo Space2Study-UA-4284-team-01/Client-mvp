@@ -19,7 +19,13 @@ const LanguageStep = ({ btnsBox }) => {
 
   const imageContainer = (
     <Box sx={styles.imgContainer}>
-      <Box component='img' src={img} sx={styles.img} />
+      <Box
+        alt=''
+        aria-hidden='true'
+        component='img'
+        src={img}
+        sx={styles.img}
+      />
     </Box>
   )
 
@@ -31,7 +37,8 @@ const LanguageStep = ({ btnsBox }) => {
         <Box sx={styles.contentBox}>
           <Typography>{t('becomeTutor.languages.title')}</Typography>
           <LanguageSelectDropdown
-            onChange={(language) => handleLanguageSelect(language)}
+            onChange={handleLanguageSelect}
+            placeholder={t('becomeTutor.languages.autocompleteLabel')}
             value={stepData.language}
           />
         </Box>
