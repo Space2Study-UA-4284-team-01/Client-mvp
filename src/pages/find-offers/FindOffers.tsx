@@ -16,6 +16,7 @@ import TitleWithDescription from '~/components/title-with-description/TitleWithD
 import DirectionLink from '~/components/direction-link/DirectionLink'
 import AppToolbar from '~/components/app-toolbar/AppToolbar'
 import SortMenu from '~/components/sort-menu/SortMenu'
+import RoleSwitcher from '~/components/role-switcher/RoleSwitcher'
 
 import {
   SizeEnum,
@@ -45,6 +46,7 @@ const FindOffers = () => {
   })
   const { userRole } = useAppSelector((state) => state.appMain)
   const oppositeRole = getOpositeRole(userRole)
+  const [authorRole, setAuthorRole] = useState<UserRoleEnum>(() => oppositeRole)
 
   const { response } = useAxios<ItemsWithCount<CategoryInterface>>({
     service: () => categoryService.getCategories({ limit: 9, skip: 0, sort }),
@@ -59,11 +61,11 @@ const FindOffers = () => {
           id={category._id}
           key={category._id}
           link={authRoutes.categories.path}
-          offers={category.totalOffers[oppositeRole]}
+          offers={category.totalOffers[authorRole]}
           title={category.name}
         />
       )),
-    [response.items, oppositeRole]
+    [response.items, authorRole]
   )
 
   const [category, setCategory] = useState('')
@@ -169,7 +171,15 @@ const FindOffers = () => {
           </Button>
         </AppToolbar>
 
-        <SortMenu setSort={setSort} sort={sort} />
+        <Box
+          sx={{
+            display: 'flex',
+            justifyContent: 'space-between'
+          }}
+        >
+          <RoleSwitcher authorRole={authorRole} onChange={setAuthorRole} />
+          <SortMenu setSort={setSort} sort={sort} />
+        </Box>
 
         <Typography sx={styles.title}>
           {t('findOffers.popularCategories.title')}
