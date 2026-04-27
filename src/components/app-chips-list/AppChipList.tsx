@@ -7,10 +7,16 @@ import AppPopover from '~/components/app-popover/AppPopover'
 
 import { styles } from '~/components/app-chips-list/AppChipsList-styles'
 
+type ChipItem = {
+  label: string
+  bgColor?: string
+  textColor?: string
+}
+
 interface AppChipListProps {
-  items: string[]
+  items: ChipItem[]
   defaultQuantity: number
-  handleChipDelete?: (item: string) => void
+  handleChipDelete?: (item: ChipItem) => void
   icon?: React.ReactElement<SvgIconProps>
   wrapperStyle?: SxProps
 }
@@ -25,13 +31,18 @@ const AppChipList: React.FC<AppChipListProps> = ({
   const hideChips =
     items.length - defaultQuantity > 0 && items.length - defaultQuantity
 
-  const chips = items.map((item) => {
-    const handleDelete = handleChipDelete && {
-      handleDelete: () => handleChipDelete(item)
-    }
+  const chips = items.map((item: ChipItem) => {
     return (
-      <AppChip {...handleDelete} icon={icon} key={item}>
-        {item}
+      <AppChip
+        bgColor={item.bgColor}
+        handleDelete={
+          handleChipDelete ? () => handleChipDelete(item) : undefined
+        }
+        icon={icon}
+        key={item.label}
+        textColor={item.textColor}
+      >
+        {item.label}
       </AppChip>
     )
   })

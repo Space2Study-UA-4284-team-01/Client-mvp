@@ -13,6 +13,7 @@ import iconsTooltip from './icons-tooltip.json'
 import signup from './signup.json'
 import footer from './footer.json'
 import becomeTutor from './become-tutor.json'
+import becomeStudent from './become-student.json'
 import step from './step.json'
 import modals from './email-modals.json'
 import errors from './errors.json'
@@ -31,6 +32,7 @@ import cooperationsPage from './cooperations-page.json'
 import myResourcesPage from './my-resources-page.json'
 import questionPage from './question-page.json'
 import subjectsPage from './subjects-page.json'
+import noResultsBlock from './no-results-block.json'
 
 const en = {
   translations: {
@@ -49,6 +51,7 @@ const en = {
     cookiePolicyPage,
     footer,
     becomeTutor,
+    becomeStudent,
     step,
     modals,
     errors,
@@ -66,7 +69,8 @@ const en = {
     cooperationsPage,
     myResourcesPage,
     questionPage,
-    subjectsPage
+    subjectsPage,
+    noResultsBlock
   }
 }
 

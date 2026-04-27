@@ -14,6 +14,7 @@ interface PopupDialogProps {
   timerId: NodeJS.Timeout | null
   closeModalAfterDelay: (delay?: number) => void
   closeModal: () => void
+  onCloseRequest?: () => void | Promise<void>
 }
 
 const PopupDialog: FC<PopupDialogProps> = ({
@@ -21,12 +22,17 @@ const PopupDialog: FC<PopupDialogProps> = ({
   paperProps,
   timerId,
   closeModalAfterDelay,
-  closeModal
+  closeModal,
+  onCloseRequest
 }) => {
   const { isMobile } = useBreakpoints()
 
   const handleMouseOver = () => timerId && clearTimeout(timerId)
   const handleMouseLeave = () => timerId && closeModalAfterDelay()
+  const handleCloseClick = () => {
+    const fn = onCloseRequest ?? closeModal
+    void Promise.resolve(fn()).catch(console.error)
+  }
 
   return (
     <Dialog
@@ -43,7 +49,7 @@ const PopupDialog: FC<PopupDialogProps> = ({
         onMouseOver={handleMouseOver}
         sx={styles.box}
       >
-        <IconButton onClick={closeModal} sx={styles.icon}>
+        <IconButton onClick={handleCloseClick} sx={styles.icon}>
           <CloseIcon />
         </IconButton>
         <Box sx={styles.contentWraper}>{content}</Box>

@@ -9,13 +9,14 @@ import {
 import PopupDialog from '~/components/popup-dialog/PopupDialog'
 import { PaperProps } from '@mui/material/Paper'
 
-interface Component {
+interface ModalConfig {
   component: React.ReactElement
   paperProps?: PaperProps
+  onCloseRequest?: () => void | Promise<void>
 }
 
 interface ModalProvideContext {
-  openModal: (component: Component, delayToClose?: number) => void
+  openModal: (component: ModalConfig, delayToClose?: number) => void
   closeModal: () => void
 }
 
@@ -28,16 +29,14 @@ const ModalContext = createContext<ModalProvideContext>(
 )
 
 const ModalProvider: FC<ModalProviderProps> = ({ children }) => {
-  const [modal, setModal] = useState<React.ReactElement | null>(null)
-  const [paperProps, setPaperProps] = useState<PaperProps>({})
+  const [modal, setModal] = useState<ModalConfig | null>(null)
   const [timer, setTimer] = useState<NodeJS.Timeout | null>(null)
 
   const closeModal = useCallback(() => {
     timer && clearTimeout(timer)
     setModal(null)
-    setPaperProps({})
     setTimer(null)
-  }, [setModal, setPaperProps, setTimer, timer])
+  }, [setModal, setTimer, timer])
 
   const closeModalAfterDelay = useCallback(
     (delay?: number) => {
@@ -48,20 +47,27 @@ const ModalProvider: FC<ModalProviderProps> = ({ children }) => {
   )
 
   const openModal = useCallback(
-    ({ component, paperProps }: Component, delayToClose?: number) => {
+    (
+      { component, paperProps, onCloseRequest }: ModalConfig,
+      delayToClose?: number
+    ) => {
       timer && clearTimeout(timer)
-      setModal(component)
+      setModal({ component, paperProps, onCloseRequest })
 
-      paperProps && setPaperProps(paperProps)
       delayToClose && closeModalAfterDelay(delayToClose)
     },
-    [setModal, setPaperProps, closeModalAfterDelay, timer]
+    [closeModalAfterDelay, timer]
   )
 
   const contextValue = useMemo(
     () => ({ openModal, closeModal }),
     [closeModal, openModal]
   )
+
+  const handleCloseRequest = () => {
+    const fn = modal?.onCloseRequest ?? closeModal
+    void Promise.resolve(fn()).catch(console.error)
+  }
 
   return (
     <ModalContext.Provider value={contextValue}>
@@ -70,8 +76,9 @@ const ModalProvider: FC<ModalProviderProps> = ({ children }) => {
         <PopupDialog
           closeModal={closeModal}
           closeModalAfterDelay={closeModalAfterDelay}
-          content={modal}
-          paperProps={paperProps}
+          content={modal.component}
+          onCloseRequest={handleCloseRequest}
+          paperProps={modal.paperProps ?? {}}
           timerId={timer}
         />
       )}

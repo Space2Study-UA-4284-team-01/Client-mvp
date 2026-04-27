@@ -22,6 +22,8 @@ import cooperationsPage from './cooperations-page.json'
 import myResourcesPage from './my-resources-page.json'
 import questionPage from './question-page.json'
 import footer from './footer.json'
+import becomeTutor from './become-tutor.json'
+import becomeStudent from './become-student.json'
 import step from './step.json'
 import userTable from './user-table.json'
 import cookiePolicyPage from './cookie-policy-page.json'
@@ -55,6 +57,8 @@ const ua = {
     myResourcesPage,
     questionPage,
     footer,
+    becomeTutor,
+    becomeStudent,
     step,
     userTable,
     cookiePolicyPage,

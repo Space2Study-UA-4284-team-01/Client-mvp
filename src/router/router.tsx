@@ -17,6 +17,10 @@ import { studentRouter } from '~/router/routes/studentRouter'
 import { guestRouter } from '~/router/routes/guestRouter'
 import { authRouter } from '~/router/routes/authRouter'
 import { home } from '~/router/constants/crumbs'
+{
+  /*delete */
+}
+import FindOffersTest from '~/pages/dev/OffersTest'
 
 const HomeRoute = lazy(() => import('~/router/helpers/HomeRoute'))
 const Logout = lazy(() => import('~/pages/logout/Logout'))
@@ -29,6 +33,7 @@ export const routerConfig = (
   >
     <Route element={<AppContent />} handle={{ crumb: home }}>
       <Route element={<HomeRoute />} index />
+      <Route element={<FindOffersTest />} path='/dev/offers' /> {/*delete */}
       {guestRouter}
       {authRouter}
       {tutorRouter}
