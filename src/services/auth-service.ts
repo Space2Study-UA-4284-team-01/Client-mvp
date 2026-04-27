@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import { AxiosResponse } from 'axios'
 
 import { appApi } from '~/redux/apiSlice'
@@ -37,7 +38,7 @@ export const AuthService = {
   }
 }
 
-export const authService = appApi.injectEndpoints({
+export const authApi = appApi.injectEndpoints({
   endpoints: (build) => ({
     signUp: build.mutation<SignupResponse, SignupParams>({
       query: (body) => ({ url: URLs.auth.signup, method: POST, body })
@@ -71,7 +72,8 @@ export const authService = appApi.injectEndpoints({
         dispatch(logout())
       }
     })
-  })
+  }),
+  overrideExisting: false
 })
 
 export const {
@@ -79,4 +81,6 @@ export const {
   useLoginMutation,
   useGoogleAuthMutation,
   useLogoutMutation
-} = authService
+} = authApi
+
+export const authService = authApi

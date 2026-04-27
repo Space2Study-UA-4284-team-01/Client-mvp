@@ -5,16 +5,16 @@ import AppChipList from '~/components/app-chips-list/AppChipList'
 const handleChipDeleteMock = vi.fn()
 
 const items = [
-  'English',
-  'Spanish',
-  'French',
-  'German',
-  'Polish',
-  'Ukrainian',
-  'Japanese',
-  'Korean',
-  'Portuguese',
-  'Chinese'
+  { label: 'English' },
+  { label: 'Spanish' },
+  { label: 'French' },
+  { label: 'German' },
+  { label: 'Polish' },
+  { label: 'Ukrainian' },
+  { label: 'Japanese' },
+  { label: 'Korean' },
+  { label: 'Portuguese' },
+  { label: 'Chinese' }
 ]
 
 describe('AppChipList', () => {

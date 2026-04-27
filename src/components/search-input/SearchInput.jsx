@@ -28,6 +28,7 @@ const SearchInput = ({ search, setSearch }) => {
             className={searchInput ? 'visible' : 'hidden'}
             data-testid='delete-icon'
             onClick={() => {
+              setSearchInput('')
               setSearch('')
             }}
           >

@@ -18,7 +18,6 @@ export const styles = {
     p: 0
   },
   chip: {
-    backgroundColor: 'basic.grey',
     color: 'primary.700',
     typography: 'subtitle2',
     borderRadius: '10px',

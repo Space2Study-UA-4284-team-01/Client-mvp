@@ -6,5 +6,12 @@
     "btnText": "Add one more subject",
     "emptyFields": "All fields must be filled",
     "sameSubject": "You have the same subject"
+  },
+  "generalInfo": {
+    "title": "Please complete the registration form for the best possible experience.",
+    "textFieldLabel": "Describe in short your professional status",
+    "helperText": "Inputs with the * sign are required",
+    "confirmAge": "I confirm that I am over 18 years old",
+    "confirmAgeError": "You must confirm that you are over 18 years old"
   }
 }

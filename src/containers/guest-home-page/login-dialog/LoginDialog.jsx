@@ -27,10 +27,12 @@ const LoginDialog = () => {
           await loginUser(data).unwrap()
           localStorage.setItem('showOnboarding', 'true')
           closeModal()
+
+          globalThis.location.reload()
         } catch (e) {
           setAlert({
             severity: snackbarVariants.error,
-            message: `errors.${e.data.code}`
+            message: t(`errors.${e?.data?.code || 'loginFailed'}`)
           })
         }
       },
