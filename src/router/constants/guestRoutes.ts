@@ -8,9 +8,6 @@ export const guestRoutes = {
   about: { route: 'about', path: 'about' },
   privacyPolicy: { route: 'privacy-policy', path: 'privacy-policy' },
   termOfUse: { route: '#', path: '#' },
-  test: {
-    roleSwitcher: { route: 'test/role-switcher', path: '/test/role-switcher' }
-  },
   navBar: {
     whatCanYouDo: { route: 'what-сan-you-do', path: '/#what-сan-you-do' },
     howItWorks: { route: 'how-it-works', path: '/#how-it-works' },
